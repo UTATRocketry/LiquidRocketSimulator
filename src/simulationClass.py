@@ -62,7 +62,7 @@ class simulationClass:
             pass
 
         else: 
-            error('Flight dynamics mode #s has not been specialized.', self.flight.type)
+            raise Exception('Flight dynamics mode #s has not been specialized.', self.flight.type)
 
 
     '''#-----------------------------------------------------------------------
