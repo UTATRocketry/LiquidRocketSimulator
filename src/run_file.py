@@ -1,8 +1,8 @@
 import math
-from __init__ import *
+import src as rocket
 
 
 rocket_selector = 'houbolt_jr_single'
-sim             = simulationClass(rocket_selector)
+sim             = rocket.simulationClass(rocket_selector)
 
 #sim.batch_sim() 

@@ -1,7 +1,3 @@
 #__init__.py
-from simulationClass import *
-from utilitiesClass import *
-from propertyClass import *
-from houbolt_jr_single import *
+from . import simulationClass, utilitiesClass, propertyClass, houbolt_jr_single, rocketClass
 import numpy as np
-from rocketClass import *

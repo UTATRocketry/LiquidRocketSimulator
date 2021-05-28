@@ -1,19 +1,18 @@
-from propertyClass import *
 import math
-from utilitiesClass import *
+import src as rocket
 
 def houbolt_jr_single():
 
-    input                       = propertyClass()
-    input.engine                = propertyClass()
-    input.settings              = propertyClass()
-    input.mass                  = propertyClass()
-    input.design                = propertyClass()
-    input.sim                   = propertyClass()
-    input.fPres                 = propertyClass()
-    input.fuel                  = propertyClass()
-    input.oxPres                = propertyClass()
-    input.ox                    = propertyClass()
+    input                       = rocket.propertyClass()
+    input.engine                = rocket.propertyClass()
+    input.settings              = rocket.propertyClass()
+    input.mass                  = rocket.propertyClass()
+    input.design                = rocket.propertyClass()
+    input.sim                   = rocket.propertyClass()
+    input.fPres                 = rocket.propertyClass()
+    input.fuel                  = rocket.propertyClass()
+    input.oxPres                = rocket.propertyClass()
+    input.ox                    = rocket.propertyClass()
 
     # Engine Input Variables
     input.engine.name           = 'utat_test'          # Engine name

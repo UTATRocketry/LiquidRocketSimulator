@@ -1,5 +1,6 @@
 import numpy as np
-from propertyClass import *
+import src as rocket
+
 class utilitiesClass:
     def __init__(self, input):
         self.g0          = 9.8056
@@ -26,12 +27,12 @@ class utilitiesClass:
 
         self.zeroArray           = np.zeros((input.sim.numpt, 1))
 
-        self.noxProp             = propertyClass()
+        self.noxProp             = rocket.propertyClass()
         self.noxProp.rho_c       = 452
         self.noxProp.Tc          = 309.57
         self.noxProp.Pc          = 7.251e6
 
-        self.noxProp.Coefs       = propertyClass()
+        self.noxProp.Coefs       = rocket.propertyClass()
         self.noxProp.Coefs.V1    = 96.512
         self.noxProp.Coefs.V2    = -4045
         self.noxProp.Coefs.V3    = -12.277
@@ -70,15 +71,15 @@ class utilitiesClass:
         self.noxProp.Coefs.q3    = 1.3779
         self.noxProp.Coefs.q4    = -4.051
 
-        self.nitrogen            = propertyClass()
-        self.nitrogen.Coefs      = propertyClass()
+        self.nitrogen            = rocket.propertyClass()
+        self.nitrogen.Coefs      = rocket.propertyClass()
         self.nitrogen.Coefs.C1   = 0.28883e5
         self.nitrogen.Coefs.C2   = 0
         self.nitrogen.Coefs.C3   = 0
         self.nitrogen.Coefs.C4   = 0
         self.nitrogen.Coefs.C5   = 0
 
-        self.nitrogen.h          = propertyClass()
+        self.nitrogen.h          = rocket.propertyClass()
         self.nitrogen.h.theta    = [0.90370032155133,\
                                       -3.99164830787538,\
                                        4.44554878990612,\

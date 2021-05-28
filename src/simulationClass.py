@@ -1,8 +1,4 @@
-from __init__ import *
-from houbolt_jr_single import *
-from get_mass_budget import *
-from utilitiesClass import *
-from rocketClass import *
+import src as rocket
 
 class simulationClass:
     #define class attributes here
@@ -16,14 +12,14 @@ class simulationClass:
             
             self.input           = self.load_variables(input_selector)
             
-            self.rocket          = rocketClass(self.input)
-            self.util            = utilitiesClass(self.input)
+            self.rocket          = rocket.rocketClass(self.input)
+            self.util            = rocket.utilitiesClass(self.input)
 
             self.numpt           = self.input.sim.numpt
             self.relax           = self.input.sim.relax
             self.altConvCrit     = self.input.sim.altConvCrit
 
-            self.flight          = propertyClass()
+            self.flight          = rocket.propertyClass()
             self.flight.t        = self.util.zeroArray
             self.flight.x        = self.util.zeroArray
             self.flight.y        = self.util.zeroArray
@@ -43,10 +39,10 @@ class simulationClass:
             
     def load_variables(self, input_selector):            
             if (input_selector == 'houbolt_jr_batch'):
-                input = houbolt_jr_batch()
+                input = rocket.houbolt_jr_batch()
                     
             elif (input_selector == 'houbolt_jr_single'):
-                input = houbolt_jr_single()
+                input = rocket.houbolt_jr_single()
 
             return input
 

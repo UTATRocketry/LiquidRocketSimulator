@@ -1,5 +1,5 @@
-from propertyClass import *
-from utilitiesClass import *
+import src as rocket
+import numpy as np
 
 class rocketClass:
     
@@ -10,8 +10,8 @@ class rocketClass:
         else:
             self.input                  = input
             #self.propulsion             = propulsionClass(input)
-            self.airframe               = propertyClass()
-            self.utilities              = utilitiesClass(input)
+            self.airframe               = rocket.propertyClass()
+            self.utilities              = rocket.utilitiesClass(input)
 
             self.airframe.drag_file     = 'Drag_Data_Houbolt_Jr.csv'
             self.drag_model()
