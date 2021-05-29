@@ -1,5 +1,5 @@
 import math
-import src as rocket
+import DMpkg as rocket
 
 
 rocket_selector = 'houbolt_jr_single'
