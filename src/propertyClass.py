@@ -51,56 +51,56 @@ class propertyClass:
         ###############################################################
         # DEFINE SIMULATION PARAMETERS
 
-        self.sim.numpt             = 100                  # Discretization points         [integer]
-        self.sim.relax             = 0.3                  # Relaxation factor             [double, 0 < relax < ]
-        self.sim.altConvCrit       = 50                   # Altitude convergence crit     [m]
-        self.sim.altBO             = 1000
+        self.sim.numpt             = inp_dic.get("sim numpt")                       # Discretization points         [integer]
+        self.sim.relax             = inp_dic.get("sim relax")                       # Relaxation factor             [double, 0 < relax < ]
+        self.sim.altConvCrit       = inp_dic.get("sim altConvCrit")                 # Altitude convergence crit     [m]
+        self.sim.altBO             = inp_dic.get("sim altBO")
 
         # Masses
-        self.mass.dry              = 50.41        #self.mass.data.Dry_Mass
+        self.mass.dry              = inp_dic.get("mass dry")                        # self.mass.data.Dry_Mass
 
         ###############################################################
         # DEFINE PROPELLANT AND PRESSURANT TANKS
         
         # Fuel pressurant parameters
-        self.fPres.name            = 'N2'                 # Nitrogen                      [char]
-        self.fPres.frac            = 100                  # Fraction                      [#]
-        self.fPres.MW              = 28                   # Molar mass                    [g/mol]
-        self.fPres.Cp              = 0.28883e5            # Heat capacity                 [J/kmol K]
-        self.fPres.mTank           = 1.78     #self.mass.data.Fuel_Pressurant_Tank
-        self.fPres.lTank           = 0.2                  # READ FROM MASS MUDGET         [kg]
-        self.fPres.vTank           = 0.002                # READ FROM MASS BUDGET         [m^3]
-        self.fPres.tTank           = 0.003175
-        self.fPres.offset          = 0.0                  # Distance till next comp.      [m]
-        self.fPres.qdot            = 300                  # Heat flux                     [W]
-        self.fPres.Tinit           = 298
-        self.fPres.Pinit           = 3500*self.settings.cnv
-        self.fPres.Rhoinit         = 250.78 #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fPres.Tinit, 'P', self.fPres.Pinit, self.fPres.name)
+        self.fPres.name            = inp_dic.get("fPres name")                      # Nitrogen                      [char]
+        self.fPres.frac            = inp_dic.get("fPres frac")                      # Fraction                      [#]
+        self.fPres.MW              = inp_dic.get("fPres MW")                        # Molar mass                    [g/mol]
+        self.fPres.Cp              = inp_dic.get("fPres Cp")                        # Heat capacity                 [J/kmol K]
+        self.fPres.mTank           = inp_dic.get("fPres mTank")                     # self.mass.data.Fuel_Pressurant_Tank
+        self.fPres.lTank           = inp_dic.get("fPres lTank")                     # READ FROM MASS MUDGET         [kg]
+        self.fPres.vTank           = inp_dic.get("fPres vTank")                     # READ FROM MASS BUDGET         [m^3]
+        self.fPres.tTank           = inp_dic.get("fPres tTank")
+        self.fPres.offset          = inp_dic.get("fPres offset")                    # Distance till next comp.      [m]
+        self.fPres.qdot            = inp_dic.get("fPres qdot")                      # Heat flux                     [W]
+        self.fPres.Tinit           = inp_dic.get("fPres Tinit")
+        self.fPres.Pinit           = inp_dic.get("fPres Pinit")*self.settings.cnv
+        self.fPres.Rhoinit         = inp_dic.get("fPres Rhoinit")                   #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fPres.Tinit, 'P', self.fPres.Pinit, self.fPres.name)
         self.fPres.mInit           = self.fPres.vTank * self.fPres.Rhoinit
 
 
         # Fuel parameters
-        self.fuel.isPropellant     = True                 # Propellant flag               [bool]
-        self.fuel.fluidtype        = 'Fuel'               # Propellant type               [char]
-        self.fuel.name             = 'C2H5OH'             # Propellant name               [char]
-        self.fuel.isPressurized    = True                 # Pressurization flag           [bool]
-        self.fuel.pressurantOrder  = 'fwd'                # Pressurant order              [str]
-        self.fuel.pressurant       = 'fPres'              # self struct name             [str]
-        self.fuel.blowdownMode     = 'constantMdot'       # Blowdown mode                 [str]
-        self.fuel.frac             = 100                  # Fraction                      [#]
-        self.fuel.MW               = 46.07                # Molar mass                    [g/mol]
-        self.fuel.tTank            = 0.003175
-        self.fuel.mTank            = 3         #self.mass.data.Fuel_Tank
-        self.fuel.lTank            = 0.27                 # READ FROM MASS MUDGET         [m]
-        self.fuel.ullage           = 0.05
-        self.fuel.mInit            = 2.33         #self.mass.data.Fuel_Mass   # Initial mass           [m]
-        self.fuel.Tinit            = 298
-        self.fuel.Pinit            = 525*self.settings.cnv
-        self.fuel.Rhoinit          = 788.40        #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fuel.Tinit, 'P', self.fuel.Pinit, 'Ethanol')
+        self.fuel.isPropellant     = inp_dic.get("fuel isPropellant")               # Propellant flag               [bool]
+        self.fuel.fluidtype        = inp_dic.get("fuel fluidtype")                  # Propellant type               [char]
+        self.fuel.name             = inp_dic.get("fuel name")                       # Propellant name               [char]
+        self.fuel.isPressurized    = inp_dic.get("fuel isPressurized")              # Pressurization flag           [bool]
+        self.fuel.pressurantOrder  = inp_dic.get("fuel pressurantOrder")            # Pressurant order              [str]
+        self.fuel.pressurant       = inp_dic.get("fuel pressurant")                 # self struct name             [str]
+        self.fuel.blowdownMode     = inp_dic.get("fuel blowdownMode")               # Blowdown mode                 [str]
+        self.fuel.frac             = inp_dic.get("fuel frac")                       # Fraction                      [#]
+        self.fuel.MW               = inp_dic.get("fuel MW")                         # Molar mass                    [g/mol]
+        self.fuel.tTank            = inp_dic.get("fuel tTank")
+        self.fuel.mTank            = inp_dic.get("fuel mTank")                      # self.mass.data.Fuel_Tank
+        self.fuel.lTank            = inp_dic.get("fuel lTank")                      # READ FROM MASS MUDGET         [m]
+        self.fuel.ullage           = inp_dic.get("fuel ullage")
+        self.fuel.mInit            = inp_dic.get("fuel mInit")                      # self.mass.data.Fuel_Mass   # Initial mass           [m]
+        self.fuel.Tinit            = inp_dic.get("fuel Tinit")
+        self.fuel.Pinit            = inp_dic.get("fuel Pinit")*self.settings.cnv
+        self.fuel.Rhoinit          = inp_dic.get("fuel Rhoinit")                    #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fuel.Tinit, 'P', self.fuel.Pinit, 'Ethanol')
         self.fuel.vTank            = self.fuel.mInit * (1 + self.fuel.ullage) / self.fuel.Rhoinit             
         self.fuel.lTank            = self.fuel.vTank / (math.pi*(0.5*self.design.diameter - self.fuel.tTank)**2)    
-        self.fuel.order            = 1                    # Order inside rocket           [integer]
-        self.fuel.offset           = 0.31                 # Distance till next comp.      [m]
+        self.fuel.order            = inp_dic.get("fuel order")                      # Order inside rocket           [integer]
+        self.fuel.offset           = inp_dic.get("fuel offset")                     # Distance till next comp.      [m]
         
 
         ###############################################################
