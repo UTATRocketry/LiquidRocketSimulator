@@ -100,7 +100,7 @@ class utilitiesClass:
                                        2.74997487910292,\
                                        2.36611999082672]
                                    
-        self.nitrogen.l          = propertyClass()
+        self.nitrogen.l          = rocket.propertyClass()
 
         self.nitrogen.l.theta    = [0.46742656471647,\
                                       -0.53799565472298,\

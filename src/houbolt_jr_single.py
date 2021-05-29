@@ -152,7 +152,7 @@ def houbolt_jr_single():
     input.ox.order              = 2                    # Order inside rocket           [integer]
     input.ox.offset             = 0.31                 # Distance till next comp.      [m]
     
-    input.props = cellss(4,3)
+    input.props = rocket.cellss(4,3)
     input.props[0][0] = 'Pressurant'
     input.props[0][1] = input.fPres
     input.props[0][2] = 0
