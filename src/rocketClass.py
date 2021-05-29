@@ -13,7 +13,7 @@ class rocketClass:
             self.airframe               = rocket.propertyClass()
             self.utilities              = rocket.utilitiesClass(input)
 
-            self.airframe.drag_file     = 'Drag_Data_Houbolt_Jr.csv'
+            self.airframe.drag_file     = 'src\Drag_Data_Houbolt_Jr.csv'
             self.drag_model()
             
     def drag_model(self):
