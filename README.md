@@ -1,10 +1,10 @@
 # DarkMatter-Python
 
 ## Convention to enable single line imports ##
-To import src into files within src or outside of it, place the following line on top:
+To import src/DMpkg into files within src or outside of it, place the following line on top:
 
 ```
-import src as rocket
+import DKpkg as rocket
 ```
 Then, whenever calling from src or any existing class, use the following:
 
@@ -12,7 +12,7 @@ Then, whenever calling from src or any existing class, use the following:
 rocket.<insert classname>()
 ```
 
-When developing new files, make sure to import src as well. After the new file is complete or at a point where it can be imported, add the following type of line to src/__init__.py:
+When developing new files, make sure to import src as well. After the new file is complete or at a point where it can be imported, add the following type of line to `src/DKpkg/__init__.py:`
 ```
 from <filename> import *
 ```
