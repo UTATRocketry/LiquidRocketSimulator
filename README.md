@@ -1,4 +1,4 @@
-# DarkMatter-Python: Riddhiman Roy's branch
+# DarkMatter-Python
 
 ## Convention to enable single line imports ##
 To import src into files within src or outside of it, place the following line on top:
