@@ -21,7 +21,7 @@ def houbolt_jr_single(inp_path):
         inp_dic = json.load(f)
 
     # Engine Input Variables
-    input.engine.name           = inp_dic.get("engine name")          # Engine name
+    input.engine.name           = inp_dic["engine"]["name"]         # Engine name
     input.engine.Mfg            = inp_dic.get("engine Mfg")               # Engine manufacturer
     input.engine.engfile        = inp_dic.get("engine file")       # Name of output engine file
 
