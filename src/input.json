@@ -1,0 +1,31 @@
+{
+    "engine input variables" : {
+        "name" : "utat_test", 
+        "MFG" : "UTAT",
+        "engfile": "utat_test.rse"
+    },
+    
+    "settings" : {
+        "efficiency" : 0.9,
+        "flightType" : "2DOF",
+        "cnv" : 6894.757,
+        "optAltFac" : 0.66,
+        "dPtol" : 700,
+        "npr_inc" : 1e-6,
+        "OF_i" : 1,
+        "OF_f" : 5,
+        "num_OF" : 20,
+        "OF" : 3,
+        "fluidModel" : "empirical",
+        "LRail" : 5,
+        "numTanks" : 0
+    },
+
+    "Mass Budget" : {
+        "url" : "1aMlNNq1Of8uMEjFZNS5RNAU0nOtnL61rxDccyHFwKFM"
+    }
+
+    
+    
+
+}
