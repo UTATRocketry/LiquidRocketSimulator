@@ -1,5 +1,5 @@
 {
-    "engine input variables" : {
+    "engine" : {
         "name" : "utat_test", 
         "MFG" : "UTAT",
         "engfile": "utat_test.rse"
@@ -23,9 +23,76 @@
 
     "Mass Budget" : {
         "url" : "1aMlNNq1Of8uMEjFZNS5RNAU0nOtnL61rxDccyHFwKFM"
-    }
+    },
 
-    
-    
+    "fPres" : {
+        "name" : "N2",
+        "frac" : 100,
+        "MW" : 28,
+        "Cp" : 0.28883e5,
+        "mTank" : 1.78,
+        "lTank" : 0.2,
+        "vTank" : 0.002,
+        "tTank" : 0.003175,
+        "offset" : 0.0,
+        "qdot" : 300,
+        "Tinit" : 298,
+        "Rhoinit" : 250.78
+    },
+
+    "fuel" : {
+        "isPropellant" : true,
+        "fluidtype" : "Fuel",
+        "name" : "C2H50H",
+        "isPressurized" : true,
+        "pressurantOrder" : "fwd",
+        "pressurant" : "fPres",
+        "blowdownMode" : "constantMdot",
+        "frac" : 100,
+        "MW" : 46.07,
+        "tTank" : 0.003175,
+        "mTank" : 3,
+        "ullage" : 0.05,
+        "mInit" : 2.33,
+        "Tinit" : 298,
+        "Rhoinit" : 788.40,
+        "order" : 1,
+        "offset" : 0.31
+    },
+
+    "oxPres" : {
+        "name" : "N2",
+        "frac" : 100,
+        "MW" : 28,
+        "Cp" : 0.28883e5,
+        "mTank" : 0.788,
+        "lTank" : 0.2,
+        "vTank" : 0.002,
+        "tTank" : 0.003175,
+        "offset" : 0.1,
+        "qdot" : 300,
+        "Tinit" : 298,
+        "Rhoinit" : 250.78
+    },
+
+    "ox" : {
+        "isPropellant" : true,
+        "fluidtype" : "Oxidizer",
+        "name" : "N2O",
+        "isPressurized" : true,
+        "pressurantOrder" : "fwd",
+        "pressurant" : "oxPres",
+        "blowdownMode" : "constantPressure",
+        "frac" : 100,
+        "MW" : 44.013,
+        "mInit" : 7,
+        "Tinit" : 278,
+        "Rhoinit" : 882.4013,
+        "ullage" : 0.05,
+        "tTank" : 0.003175,
+        "mTank" : 4.8,
+        "order" : 2,
+        "offset" : 0.31
+    },
 
 }

@@ -17,6 +17,23 @@ def houbolt_jr_single():
     # oxPres_dic = inp_dic.get("oxPres")
     # oxPres_dic = inp_dic.get("oxPres")
 
+    """
+    look into what to do with:
+    input.fPres.Pinit
+    input.fPres.mInit 
+    input.fuel.lTank
+    input.fuel.Pinit
+    input.fuel.vTank
+    input.fuel.lTank
+    input.oxPres.Pinit
+    input.oxPres.mInit
+    input.ox.Pinit
+    input.ox.vTank
+    input.ox.lTank
+
+    all of props
+    """
+
     return inp_dic
 
 
