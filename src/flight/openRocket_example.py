@@ -33,15 +33,15 @@ recovery_time = flight_run.recovery_time
 
 '''Example 1: Using the simulation variables from the openRocket_flight.py file to generate a 2D graph'''
 
-plt.plot(flight_run.simulation_information.TYPE_TIME, flight_run.kinematics_dynamics.TYPE_ORIENTATION_THETA)
+plt.plot(state_vector[0], state_vector[4])
 plt.show()
 
 '''Example 2: Using the simulation variables from the openRocket_flight.py file to generate a 3D graph'''
 
 ax = plt.axes(projection='3d')
-x = flight_run.kinematics_dynamics.TYPE_POSITION_X
-y = flight_run.kinematics_dynamics.TYPE_POSITION_Y
-z = flight_run.kinematics_dynamics.TYPE_ALTITUDE
+x = state_vector[1]
+y = state_vector[2]
+z = state_vector[3]
 
 ax.plot(x, y, z)
 ax.set_xlim3d([-1000, 1000])
