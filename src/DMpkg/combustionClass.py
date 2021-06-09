@@ -8,6 +8,10 @@ class combustionClass:
         self.util = utilitiesClass(self.input)
 
     def getPropellantTags(self):
+        self.fuelTag = self.input.get("fuel")
+        self.oxidizerTag = self.input.get("ox")
+
+    
 
 
 

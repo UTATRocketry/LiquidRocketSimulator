@@ -2,7 +2,7 @@ import math
 import json
 import DMpkg as rocket
 
-def houbolt_jr_single():
+def houbolt_jr_single(inp_path):
 
     with open(inp_path, "r") as f:
             inp_dic = json.load(f)
