@@ -3,159 +3,167 @@ import json
 class propertyClass:
 
     def __init__(self, inp_path):
-        with open(inp_path, "r") as f:
-            inp_dic = json.load(f)
-        
+        input                       = propertyClass()
+        input.engine                = propertyClass()
+        input.settings              = propertyClass()
+        input.mass                  = propertyClass()
+        input.design                = propertyClass()
+        input.sim                   = propertyClass()
+        input.fPres                 = propertyClass()
+        input.fuel                  = propertyClass()
+        input.oxPres                = propertyClass()
+        input.ox                    = propertyClass()
+
         # Engine Input Variables
-        self.engine.name           = inp_dic.get("engine name")                     # Engine name
-        self.engine.Mfg            = inp_dic.get("engine Mfg")                      # Engine manufacturer
-        self.engine.engfile        = inp_dic.get("engine engfile")                  # Name of output engine file
+        input.engine.name           = 'utat_test'          # Engine name
+        input.engine.Mfg            = 'UTAT'               # Engine manufacturer
+        input.engine.engfile        = 'utat_test.rse'      # Name of output engine file
 
         # Settings
-        self.settings.efficiency   = inp_dic.get("settings efficiency")             # Combustion efficiency
-        self.settings.flightType   = inp_dic.get("settings flightType")             # Flight dynamics type
-        self.settings.cnv          = inp_dic.get("settings cnv")                    # Psi to Pa
-        self.settings.optAltFac    = inp_dic.get("settings optAltFac")              # Optimization altitude factor  [N/A]
-        self.settings.dPtol        = inp_dic.get("settings dPtol")                  # Pressure drop tolerance       [Pa]
-        self.settings.npr_inc      = inp_dic.get("settings npr_inc")                # Pressurant increment
-        self.settings.OF_i         = inp_dic.get("settings OF_i")                   # initial OF value
-        self.settings.OF_f         = inp_dic.get("settings OF_f")                   # final OF value
-        self.settings.num_OF       = inp_dic.get("settings num_OF")                 # final OF timestep
-        self.settings.OF           = inp_dic.get("settings OF")                     # Design Ox/Fuel ratio          [double]
-        self.settings.fluidModel   = inp_dic.get("settings fluidModel")             # Fluid model for nitrous oxide
-        self.settings.LRail        = inp_dic.get("settings LRail")                  # Launch rail length
-        self.settings.numTanks     = inp_dic.get("settings numTanks")  
+        input.settings.efficiency   = 0.9                  # Combustion efficiency
+        input.settings.flightType   = '2DOF'               # Flight dynamics type
+        input.settings.cnv          = 6894.757             # Psi to Pa
+        input.settings.optAltFac    = 0.66                 # Optimization altitude factor  [N/A]
+        input.settings.dPtol        = 700                  # Pressure drop tolerance       [Pa]
+        input.settings.npr_inc      = 1e-6                 # Pressurant increment
+        input.settings.OF_i         = 1                    # initial OF value
+        input.settings.OF_f         = 5                    # final OF value
+        input.settings.num_OF       = 20                   # final OF timestep
+        input.settings.OF           = 3                    # Design Ox/Fuel ratio          [double]
+        input.settings.fluidModel   = 'empirical'          # Fluid model for nitrous oxide
+        input.settings.LRail        = 5                    # Launch rail length
+        input.settings.numTanks     = 0
 
         # Mass Budget
-        self.mass.url              = inp_dic.get("mass url") 
-        #self.mass.data             = get_mass_budget(self.mass.url)
+        input.mass.url              = '1aMlNNq1Of8uMEjFZNS5RNAU0nOtnL61rxDccyHFwKFM'
+        # input.mass.data             = get_mass_budget(input.mass.url)
 
         ###############################################################
         # DEFINE ROCKET DESIGN VARIABLES
 
         # Engine burn time                                  [s]
-        self.design.tBurn          = inp_dic.get("design tBurn") 
+        input.design.tBurn          = 8.4
         # Design Ox mdot                                    [kg/s]
-        self.design.mDotox         = inp_dic.get("design mDotox")
+        input.design.mDotox         = 0.8
         # Launch angle                                      [degrees]
-        self.design.thetaL         = inp_dic.get("design thetaL")
+        input.design.thetaL         = 3
         # Rocket diameter                                   [m]
-        self.design.diameter       = inp_dic.get("design diameter")
+        input.design.diameter       = 0.1524
         # Design chamber pressure                           [psi]
-        self.design.Pcc            = inp_dic.get("design Pcc")
+        input.design.Pcc            = 350
         # Design OF ratio                                   [double]
-        self.design.OF             = inp_dic.get("design OF")
+        input.design.OF             = 3
         # Injector discharge coeff.                         [double]
-        self.design.injCd          = inp_dic.get("design injCd")
+        input.design.injCd          = 0.4
 
         ###############################################################
         # DEFINE SIMULATION PARAMETERS
 
-        self.sim.numpt             = inp_dic.get("sim numpt")                       # Discretization points         [integer]
-        self.sim.relax             = inp_dic.get("sim relax")                       # Relaxation factor             [double, 0 < relax < ]
-        self.sim.altConvCrit       = inp_dic.get("sim altConvCrit")                 # Altitude convergence crit     [m]
-        self.sim.altBO             = inp_dic.get("sim altBO")
+        input.sim.numpt             = 100                  # Discretization points         [integer]
+        input.sim.relax             = 0.3                  # Relaxation factor             [double, 0 < relax < ]
+        input.sim.altConvCrit       = 50                   # Altitude convergence crit     [m]
+        input.sim.altBO             = 1000
 
         # Masses
-        self.mass.dry              = inp_dic.get("mass dry")                        # self.mass.data.Dry_Mass
+        input.mass.dry              = 50.41        #input.mass.data.Dry_Mass
 
         ###############################################################
         # DEFINE PROPELLANT AND PRESSURANT TANKS
         
         # Fuel pressurant parameters
-        self.fPres.name            = inp_dic.get("fPres name")                      # Nitrogen                      [char]
-        self.fPres.frac            = inp_dic.get("fPres frac")                      # Fraction                      [#]
-        self.fPres.MW              = inp_dic.get("fPres MW")                        # Molar mass                    [g/mol]
-        self.fPres.Cp              = inp_dic.get("fPres Cp")                        # Heat capacity                 [J/kmol K]
-        self.fPres.mTank           = inp_dic.get("fPres mTank")                     # self.mass.data.Fuel_Pressurant_Tank
-        self.fPres.lTank           = inp_dic.get("fPres lTank")                     # READ FROM MASS MUDGET         [kg]
-        self.fPres.vTank           = inp_dic.get("fPres vTank")                     # READ FROM MASS BUDGET         [m^3]
-        self.fPres.tTank           = inp_dic.get("fPres tTank")
-        self.fPres.offset          = inp_dic.get("fPres offset")                    # Distance till next comp.      [m]
-        self.fPres.qdot            = inp_dic.get("fPres qdot")                      # Heat flux                     [W]
-        self.fPres.Tinit           = inp_dic.get("fPres Tinit")
-        self.fPres.Pinit           = inp_dic.get("fPres Pinit")*self.settings.cnv
-        self.fPres.Rhoinit         = inp_dic.get("fPres Rhoinit")                   #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fPres.Tinit, 'P', self.fPres.Pinit, self.fPres.name)
-        self.fPres.mInit           = self.fPres.vTank * self.fPres.Rhoinit
+        input.fPres.name            = 'N2'                 # Nitrogen                      [char]
+        input.fPres.frac            = 100                  # Fraction                      [#]
+        input.fPres.MW              = 28                   # Molar mass                    [g/mol]
+        input.fPres.Cp              = 0.28883e5            # Heat capacity                 [J/kmol K]
+        input.fPres.mTank           = 1.78     #input.mass.data.Fuel_Pressurant_Tank
+        input.fPres.lTank           = 0.2                  # READ FROM MASS MUDGET         [kg]
+        input.fPres.vTank           = 0.002                # READ FROM MASS BUDGET         [m^3]
+        input.fPres.tTank           = 0.003175
+        input.fPres.offset          = 0.0                  # Distance till next comp.      [m]
+        input.fPres.qdot            = 300                  # Heat flux                     [W]
+        input.fPres.Tinit           = 298
+        input.fPres.Pinit           = 3500*input.settings.cnv
+        input.fPres.Rhoinit         = 250.78 #py.CoolProp.CoolProp.PropsSI('D', 'T', input.fPres.Tinit, 'P', input.fPres.Pinit, input.fPres.name)
+        input.fPres.mInit           = input.fPres.vTank * input.fPres.Rhoinit
 
 
         # Fuel parameters
-        self.fuel.isPropellant     = inp_dic.get("fuel isPropellant")               # Propellant flag               [bool]
-        self.fuel.fluidtype        = inp_dic.get("fuel fluidtype")                  # Propellant type               [char]
-        self.fuel.name             = inp_dic.get("fuel name")                       # Propellant name               [char]
-        self.fuel.isPressurized    = inp_dic.get("fuel isPressurized")              # Pressurization flag           [bool]
-        self.fuel.pressurantOrder  = inp_dic.get("fuel pressurantOrder")            # Pressurant order              [str]
-        self.fuel.pressurant       = inp_dic.get("fuel pressurant")                 # self struct name             [str]
-        self.fuel.blowdownMode     = inp_dic.get("fuel blowdownMode")               # Blowdown mode                 [str]
-        self.fuel.frac             = inp_dic.get("fuel frac")                       # Fraction                      [#]
-        self.fuel.MW               = inp_dic.get("fuel MW")                         # Molar mass                    [g/mol]
-        self.fuel.tTank            = inp_dic.get("fuel tTank")
-        self.fuel.mTank            = inp_dic.get("fuel mTank")                      # self.mass.data.Fuel_Tank
-        self.fuel.lTank            = inp_dic.get("fuel lTank")                      # READ FROM MASS MUDGET         [m]
-        self.fuel.ullage           = inp_dic.get("fuel ullage")
-        self.fuel.mInit            = inp_dic.get("fuel mInit")                      # self.mass.data.Fuel_Mass   # Initial mass           [m]
-        self.fuel.Tinit            = inp_dic.get("fuel Tinit")
-        self.fuel.Pinit            = inp_dic.get("fuel Pinit")*self.settings.cnv
-        self.fuel.Rhoinit          = inp_dic.get("fuel Rhoinit")                    #py.CoolProp.CoolProp.PropsSI('D', 'T', self.fuel.Tinit, 'P', self.fuel.Pinit, 'Ethanol')
-        self.fuel.vTank            = self.fuel.mInit * (1 + self.fuel.ullage) / self.fuel.Rhoinit             
-        self.fuel.lTank            = self.fuel.vTank / (math.pi*(0.5*self.design.diameter - self.fuel.tTank)**2)    
-        self.fuel.order            = inp_dic.get("fuel order")                      # Order inside rocket           [integer]
-        self.fuel.offset           = inp_dic.get("fuel offset")                     # Distance till next comp.      [m]
+        input.fuel.isPropellant     = True                 # Propellant flag               [bool]
+        input.fuel.fluidtype        = 'Fuel'               # Propellant type               [char]
+        input.fuel.name             = 'C2H5OH'             # Propellant name               [char]
+        input.fuel.isPressurized    = True                 # Pressurization flag           [bool]
+        input.fuel.pressurantOrder  = 'fwd'                # Pressurant order              [str]
+        input.fuel.pressurant       = 'fPres'              # Input struct name             [str]
+        input.fuel.blowdownMode     = 'constantMdot'       # Blowdown mode                 [str]
+        input.fuel.frac             = 100                  # Fraction                      [#]
+        input.fuel.MW               = 46.07                # Molar mass                    [g/mol]
+        input.fuel.tTank            = 0.003175
+        input.fuel.mTank            = 3         #input.mass.data.Fuel_Tank
+        input.fuel.lTank            = 0.27                 # READ FROM MASS MUDGET         [m]
+        input.fuel.ullage           = 0.05
+        input.fuel.mInit            = 2.33         #input.mass.data.Fuel_Mass   # Initial mass           [m]
+        input.fuel.Tinit            = 298
+        input.fuel.Pinit            = 525*input.settings.cnv
+        input.fuel.Rhoinit          = 788.40        #py.CoolProp.CoolProp.PropsSI('D', 'T', input.fuel.Tinit, 'P', input.fuel.Pinit, 'Ethanol')
+        input.fuel.vTank            = input.fuel.mInit * (1 + input.fuel.ullage) / input.fuel.Rhoinit             
+        input.fuel.lTank            = input.fuel.vTank / (math.pi*(0.5*input.design.diameter - input.fuel.tTank)**2)    
+        input.fuel.order            = 1                    # Order inside rocket           [integer]
+        input.fuel.offset           = 0.31                 # Distance till next comp.      [m]
         
 
         ###############################################################
 
         # Oxidizer pressurant parameters
-        self.oxPres.name           = inp_dic.get("oxPres name")                # Nitrogen                      [str]
-        self.oxPres.frac           = inp_dic.get("oxPres frac")                  # Fraction                      [#]
-        self.oxPres.MW             = inp_dic.get("oxPres MW")                # Molar mass                    [g/mol]
-        self.oxPres.Cp             = inp_dic.get("oxPres Cp")            # Heat capacity                 [J/kmol K]
-        self.oxPres.mTank          = inp_dic.get("oxPres mTank")
-        self.oxPres.lTank          = inp_dic.get("oxPres lTank")                  # READ FROM MASS BUDGET         [m]
-        self.oxPres.vTank          = inp_dic.get("oxPres vTank")                # READ FROM MASS BUDGET         [m^3]
-        self.oxPres.tTank          = inp_dic.get("oxPres tTank")
-        self.oxPres.offset         = inp_dic.get("oxPres offset")                  # Distance till next comp.      [m]
-        self.oxPres.qdot           = inp_dic.get("oxPres qdot")                  # Heat flux                     [W]
-        self.oxPres.Tinit          = inp_dic.get("oxPres Tinit")
-        self.oxPres.Pinit          = inp_dic.get("oxPres Pinit")*self.settings.cnv
-        self.oxPres.Rhoinit        = inp_dic.get("oxPres Rhoinit")            #py.CoolProp.CoolProp.PropsSI('D', 'T', self.oxPres.Tinit, 'P', self.oxPres.Pinit, self.oxPres.name)
-        self.oxPres.mInit          = self.oxPres.vTank * self.oxPres.Rhoinit
+        input.oxPres.name           = 'N2'                 # Nitrogen                      [str]
+        input.oxPres.frac           = 100                  # Fraction                      [#]
+        input.oxPres.MW             = 28                   # Molar mass                    [g/mol]
+        input.oxPres.Cp             = 0.28883e5            # Heat capacity                 [J/kmol K]
+        input.oxPres.mTank          = 0.788 #input.mass.data.Ox_Pressurant_Tank
+        input.oxPres.lTank          = 0.2                  # READ FROM MASS BUDGET         [m]
+        input.oxPres.vTank          = 0.002                # READ FROM MASS BUDGET         [m^3]
+        input.oxPres.tTank         = 0.003175
+        input.oxPres.offset         = 0.1                  # Distance till next comp.      [m]
+        input.oxPres.qdot           = 300                  # Heat flux                     [W]
+        input.oxPres.Tinit          = 298
+        input.oxPres.Pinit          = 3500*input.settings.cnv
+        input.oxPres.Rhoinit        = 250.78            #py.CoolProp.CoolProp.PropsSI('D', 'T', input.oxPres.Tinit, 'P', input.oxPres.Pinit, input.oxPres.name)
+        input.oxPres.mInit          = input.oxPres.vTank * input.oxPres.Rhoinit
 
 
         # Oxidizer parameters
-        self.ox.isPropellant       = inp_dic.get("ox isPropellant")                 # Propellant flag               [bool]
-        self.ox.fluidtype          = inp_dic.get("ox fluidtype")             # Propellant type               [str]
-        self.ox.name               = inp_dic.get("ox name")                  # Propellant name               [str]
-        self.ox.isPressurized      = inp_dic.get("ox isPressurized")                   # Pressurization flag           [bool]
-        self.ox.pressurantOrder    = inp_dic.get("ox pressurantOrder")                  # Pressurant order              [str]
-        self.ox.pressurant         = inp_dic.get("ox pressurant")               # self struct name             [str]
-        self.ox.blowdownMode       = inp_dic.get("ox blowdownMode")     # Blowdown mode                 [str]
-        self.ox.frac               = inp_dic.get("ox frac")                    # Fraction                      [#]
-        self.ox.MW                 = inp_dic.get("ox MW")                 # Molar mass                    [g/mol]
-        self.ox.mInit              = inp_dic.get("ox mInit")          #self.mass.data.Ox_Mass
-        self.ox.Tinit              = inp_dic.get("ox Tinit")  
-        self.ox.Pinit              = inp_dic.get("ox Pinit")*self.settings.cnv
-        self.ox.Rhoinit            = inp_dic.get("ox Rhoinit")            #py.CoolProp.CoolProp.PropsSI('D', 'T', self.ox.Tinit, 'P', self.ox.Pinit, self.ox.name)
-        self.ox.ullage             = inp_dic.get("ox ullage")  
-        self.ox.tTank              = inp_dic.get("ox tTank")  
-        self.ox.mTank              = inp_dic.get("ox mTank")        #self.mass.data.Ox_Tank
-        self.ox.vTank              = self.ox.mInit * (1 + self.ox.ullage) / self.ox.Rhoinit             
-        self.ox.lTank              = self.ox.vTank / (math.pi*(0.5*self.design.diameter - self.ox.tTank)**2)                  
-        self.ox.order              = inp_dic.get("ox order")                      # Order inside rocket           [integer]
-        self.ox.offset             = inp_dic.get("ox offset")                 # Distance till next comp.      [m]
+        input.ox.isPropellant       = True                 # Propellant flag               [bool]
+        input.ox.fluidtype          = 'Oxidizer'           # Propellant type               [str]
+        input.ox.name               = 'N2O'                # Propellant name               [str]
+        input.ox.isPressurized      = True                 # Pressurization flag           [bool]
+        input.ox.pressurantOrder    = 'fwd'                # Pressurant order              [str]
+        input.ox.pressurant         = 'oxPres'             # Input struct name             [str]
+        input.ox.blowdownMode       = 'constantPressure'   # Blowdown mode                 [str]
+        input.ox.frac               = 100                  # Fraction                      [#]
+        input.ox.MW                 = 44.013               # Molar mass                    [g/mol]
+        input.ox.mInit              = 7         #input.mass.data.Ox_Mass
+        input.ox.Tinit              = 278
+        input.ox.Pinit              = 525*input.settings.cnv
+        input.ox.Rhoinit            = 882.4013          #py.CoolProp.CoolProp.PropsSI('D', 'T', input.ox.Tinit, 'P', input.ox.Pinit, input.ox.name)
+        input.ox.ullage             = 0.05
+        input.ox.tTank              = 0.003175
+        input.ox.mTank              = 4.8       #input.mass.data.Ox_Tank
+        input.ox.vTank              = input.ox.mInit * (1 + input.ox.ullage) / input.ox.Rhoinit             
+        input.ox.lTank              = input.ox.vTank / (math.pi*(0.5*input.design.diameter - input.ox.tTank)**2)                  
+        input.ox.order              = 2                    # Order inside rocket           [integer]
+        input.ox.offset             = 0.31                 # Distance till next comp.      [m]
         
+        input.props = cellss(4,3)
+        input.props[0][0] = 'Pressurant'
+        input.props[0][1] = input.fPres
+        input.props[0][2] = 0
+        input.props[1][0] = 'Fuel'
+        input.props[1][1] = input.fuel
+        input.props[1][2] = 1
+        input.props[2][0] = 'Pressurant'
+        input.props[2][1] = input.oxPres
+        input.props[2][2] = 0
+        input.props[3][0] = 'Oxidizer'
+        input.props[3][1] = input.ox
+        input.props[3][2] = 3
 
-        #TODO not sure whats up with this stuff
-        self.props = cellss(4,3)
-        self.props[0][0] = 'Pressurant'
-        self.props[0][1] = self.fPres
-        self.props[0][2] = 0
-        self.props[1][0] = 'Fuel'
-        self.props[1][1] = self.fuel
-        self.props[1][2] = 1
-        self.props[2][0] = 'Pressurant'
-        self.props[2][1] = self.oxPres
-        self.props[2][2] = 0
-        self.props[3][0] = 'Oxidizer'
-        self.props[3][1] = self.ox
-        self.props[3][2] = 3
+        return input
