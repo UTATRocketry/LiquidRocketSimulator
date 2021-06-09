@@ -1,136 +1,137 @@
 import numpy as np
 import DMpkg as rocket
+from dataclasses import dataclass
 
+@dataclass
 class utilitiesClass:
-    def __init__(self, input):
-        self.g0          = 9.8056
-        self.earthR      = 6371e3
+    g0          = 9.8056
+    earthR      = 6371e3
 
-        self.R           = 8314
-        self.airR        = 287.05
-        self.n2R         = 8314/28
-        self.airM        = 0.0289644 #molar mass of air (kg/mol)
-        self.airGamma    = 1.4
+    R           = 8314
+    airR        = 287.05
+    n2R         = 8314/28
+    airM        = 0.0289644 #molar mass of air (kg/mol)
+    airGamma    = 1.4
 
-        self.cnv         = 6894.76
+    cnv         = 6894.76
 
-        self.coolProp_conversions = ('C2H5OH',  'Ethanol')
+    coolProp_conversions = ('C2H5OH',  'Ethanol')
 
-        self.input       = None
-        self.zeroArray   = None
-        self.noxProp     = None
-        self.nitrogen    = None
-        self.cp          = None
-        self.coolprop_alias  = None
-
+    input       = None
+    zeroArray   = None
+    noxProp     = None
+    nitrogen    = None
+    cp          = None
+    coolprop_alias  = None
 
 
-        self.zeroArray           = np.zeros((input.sim.numpt, 1))
 
-        self.noxProp             = rocket.propertyClass()
-        self.noxProp.rho_c       = 452
-        self.noxProp.Tc          = 309.57
-        self.noxProp.Pc          = 7.251e6
+    zeroArray           = np.zeros((input.sim.numpt, 1))
 
-        self.noxProp.Coefs       = rocket.propertyClass()
-        self.noxProp.Coefs.V1    = 96.512
-        self.noxProp.Coefs.V2    = -4045
-        self.noxProp.Coefs.V3    = -12.277
-        self.noxProp.Coefs.V4    = 2.886e-5
-        self.noxProp.Coefs.V5    = 2
+    noxProp             = rocket.propertyClass()
+    noxProp.rho_c       = 452
+    noxProp.Tc          = 309.57
+    noxProp.Pc          = 7.251e6
 
-        self.noxProp.Coefs.T1    = 2.3215e7
-        self.noxProp.Coefs.T2    = 0.384
-        self.noxProp.Coefs.T3    = 0
-        self.noxProp.Coefs.T4    = 0
+    noxProp.Coefs       = rocket.propertyClass()
+    noxProp.Coefs.V1    = 96.512
+    noxProp.Coefs.V2    = -4045
+    noxProp.Coefs.V3    = -12.277
+    noxProp.Coefs.V4    = 2.886e-5
+    noxProp.Coefs.V5    = 2
 
-        self.noxProp.Coefs.Q1    = 2.781
-        self.noxProp.Coefs.Q2    = 0.27244
-        self.noxProp.Coefs.Q3    = 309.57
-        self.noxProp.Coefs.Q4    = 0.2882
+    noxProp.Coefs.T1    = 2.3215e7
+    noxProp.Coefs.T2    = 0.384
+    noxProp.Coefs.T3    = 0
+    noxProp.Coefs.T4    = 0
 
-        self.noxProp.Coefs.D1    = 0.2934e5
-        self.noxProp.Coefs.D2    = 0.3236e5
-        self.noxProp.Coefs.D3    = 1.1238e3
-        self.noxProp.Coefs.D4    = 0.2177e5
-        self.noxProp.Coefs.D5    = 479.4
+    noxProp.Coefs.Q1    = 2.781
+    noxProp.Coefs.Q2    = 0.27244
+    noxProp.Coefs.Q3    = 309.57
+    noxProp.Coefs.Q4    = 0.2882
 
-        self.noxProp.Coefs.E1    = 6.7556e4
-        self.noxProp.Coefs.E2    = 5.4373e1
-        self.noxProp.Coefs.E3    = 0
-        self.noxProp.Coefs.E4    = 0
-        self.noxProp.Coefs.E5    = 0
+    noxProp.Coefs.D1    = 0.2934e5
+    noxProp.Coefs.D2    = 0.3236e5
+    noxProp.Coefs.D3    = 1.1238e3
+    noxProp.Coefs.D4    = 0.2177e5
+    noxProp.Coefs.D5    = 479.4
 
-        self.noxProp.Coefs.b1    = 1.72328
-        self.noxProp.Coefs.b2    = -0.8395
-        self.noxProp.Coefs.b3    = 0.5106
-        self.noxProp.Coefs.b4    = 0.10412
+    noxProp.Coefs.E1    = 6.7556e4
+    noxProp.Coefs.E2    = 5.4373e1
+    noxProp.Coefs.E3    = 0
+    noxProp.Coefs.E4    = 0
+    noxProp.Coefs.E5    = 0
 
-        self.noxProp.Coefs.q1    = -6.71893
-        self.noxProp.Coefs.q2    = 1.35966
-        self.noxProp.Coefs.q3    = 1.3779
-        self.noxProp.Coefs.q4    = -4.051
+    noxProp.Coefs.b1    = 1.72328
+    noxProp.Coefs.b2    = -0.8395
+    noxProp.Coefs.b3    = 0.5106
+    noxProp.Coefs.b4    = 0.10412
 
-        self.nitrogen            = rocket.propertyClass()
-        self.nitrogen.Coefs      = rocket.propertyClass()
-        self.nitrogen.Coefs.C1   = 0.28883e5
-        self.nitrogen.Coefs.C2   = 0
-        self.nitrogen.Coefs.C3   = 0
-        self.nitrogen.Coefs.C4   = 0
-        self.nitrogen.Coefs.C5   = 0
+    noxProp.Coefs.q1    = -6.71893
+    noxProp.Coefs.q2    = 1.35966
+    noxProp.Coefs.q3    = 1.3779
+    noxProp.Coefs.q4    = -4.051
 
-        self.nitrogen.h          = rocket.propertyClass()
-        self.nitrogen.h.theta    = [0.90370032155133,\
-                                      -3.99164830787538,\
-                                       4.44554878990612,\
-                                      -1.68387394930366,\
-                                       1.84282855081908,\
-                                      -2.71807522455834,\
-                                       1.80658523674363,\
-                                      -0.00026662830718,\
-                                       0.16405364316350]
+    nitrogen            = rocket.propertyClass()
+    nitrogen.Coefs      = rocket.propertyClass()
+    nitrogen.Coefs.C1   = 0.28883e5
+    nitrogen.Coefs.C2   = 0
+    nitrogen.Coefs.C3   = 0
+    nitrogen.Coefs.C4   = 0
+    nitrogen.Coefs.C5   = 0
 
-        self.nitrogen.h.alpha    = [1,               \
-                                       0.45607085009281,\
-                                       0.99224794564113,\
-                                       1.58495789262624,\
-                                       0.53133147588636,\
-                                       1.29132167947510,\
-                                       1.44008913900161,\
-                                       2.74997487910292,\
-                                       2.36611999082672]
-                                   
-        self.nitrogen.l          = rocket.propertyClass()
+    nitrogen.h          = rocket.propertyClass()
+    nitrogen.h.theta    = [0.90370032155133,\
+                                    -3.99164830787538,\
+                                    4.44554878990612,\
+                                    -1.68387394930366,\
+                                    1.84282855081908,\
+                                    -2.71807522455834,\
+                                    1.80658523674363,\
+                                    -0.00026662830718,\
+                                    0.16405364316350]
 
-        self.nitrogen.l.theta    = [0.46742656471647,\
-                                      -0.53799565472298,\
-                                      -9.22454428760102,\
-                                       9.15603503101003,\
-                                       3.18808664459882,\
-                                       0.30163700042055,\
-                                      -0.27300234680706,\
-                                      -1.00749719408221,\
-                                      -1.49106816983329]
+    nitrogen.h.alpha    = [1,               \
+                                    0.45607085009281,\
+                                    0.99224794564113,\
+                                    1.58495789262624,\
+                                    0.53133147588636,\
+                                    1.29132167947510,\
+                                    1.44008913900161,\
+                                    2.74997487910292,\
+                                    2.36611999082672]
+                                
+    nitrogen.l          = rocket.propertyClass()
 
-        self.nitrogen.l.alpha    = [1,               \
-                                       1.41102397459172,\
-                                       0.33562799290636,\
-                                       0.79810083070486,\
-                                       0.01008992455881,\
-                                       2.53968667359886,\
-                                       2.51281397715323,\
-                                       1.20879498088509,\
-                                       1.69572064361084]
-                                   
-        self.nitrogen.Tc         = 126.2
-        self.nitrogen.Pc         = 492.314
+    nitrogen.l.theta    = [0.46742656471647,\
+                                    -0.53799565472298,\
+                                    -9.22454428760102,\
+                                    9.15603503101003,\
+                                    3.18808664459882,\
+                                    0.30163700042055,\
+                                    -0.27300234680706,\
+                                    -1.00749719408221,\
+                                    -1.49106816983329]
+
+    nitrogen.l.alpha    = [1,               \
+                                    1.41102397459172,\
+                                    0.33562799290636,\
+                                    0.79810083070486,\
+                                    0.01008992455881,\
+                                    2.53968667359886,\
+                                    2.51281397715323,\
+                                    1.20879498088509,\
+                                    1.69572064361084]
+                                
+    nitrogen.Tc         = 126.2
+    nitrogen.Pc         = 492.314
             
         #py.importlib.import_module('CoolProp.CoolProp')
-        #self.cp = load_cp.PropsSI
+        #cp = load_cp.PropsSI
             
-        #self.coolprop_alias = cells(1, 2)
-        #self.coolprop_alias[1][1] = 'C2H5OH'
-        #self.coolprop_alias[1] [2] = 'Ethanol'
+        #coolprop_alias = cells(1, 2)
+        #coolprop_alias[1][1] = 'C2H5OH'
+        #coolprop_alias[1] [2] = 'Ethanol'
 
 
 
