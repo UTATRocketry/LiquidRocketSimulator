@@ -123,7 +123,7 @@ class openRocket_flight():
         # critical time stamps
         self.begin_time = t[0]
         self.end_time = t[-1]
-        self.recovery_time = self.events[FlightEvent.RECOVERY_DEVICE_DEPLOYMENT][0]
+        self.recovery_time = self.events[FlightEvent.RECOVERY_DEVICE_DEPLOYMENT]
         self.apogee_time = self.events[FlightEvent.APOGEE]
 
         # position of the rocket wrt the launch site, units in meter and second
