@@ -33,7 +33,7 @@ recovery_time = flight_run.recovery_time
 
 '''Example 1: Using the simulation variables from the openRocket_flight.py file to generate a 2D graph'''
 
-plt.plot(state_vector[0], state_vector[4])
+plt.plot(state_vector[0], state_vector[3])
 plt.show()
 
 '''Example 2: Using the simulation variables from the openRocket_flight.py file to generate a 3D graph'''

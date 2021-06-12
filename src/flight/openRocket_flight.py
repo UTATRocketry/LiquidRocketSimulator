@@ -198,3 +198,11 @@ class openRocket_flight():
         if time < t[0] or time > t[-1]:
             print("Given time is out of bounds.")
         return np.array([np.interp(time,t,s[i]) for i in range(len(s))])
+
+    def value_of(self, type, time):
+        if not self.runned:
+            raise Exception("Run the class before calling this function.")
+        t = self.state_vector[0]
+        if time < t[0] or time > t[-1]:
+            print("Given time is out of bounds.")
+        return np.interp(time,t,type)
