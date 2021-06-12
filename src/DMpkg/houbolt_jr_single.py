@@ -1,6 +1,7 @@
 import math
 import json
 import DMpkg as rocket
+from DMpkg.utilitiesClass import cellss
 
 def houbolt_jr_single(inp_path):
 
@@ -17,11 +18,39 @@ def houbolt_jr_single(inp_path):
     # oxPres_dic = inp_dic.get("oxPres")
     # oxPres_dic = inp_dic.get("oxPres")
 
+    inp_dic["fPres"]["Pinit"] = 3500 * inp_dic.get("settings").get("cnv")
+    inp_dic["fPres"]["mInit"] = inp_dic.get("fPres").get("vTank") * inp_dic.get("fPres").get("Rhoinit")
+
+    inp_dic["fuel"]["Pinit"] = 525 * inp_dic.get("settings").get("cnv")
+    inp_dic["fuel"]["vTank"] = inp_dic.get("fuel").get("mInit") * (1 + inp_dic.get("fuel").get("ullage")) / inp_dic.get("fuel").get("Rhoinit")
+    inp_dic["fuel"]["lTank"] = inp_dic.get("fuel").get("vTank") / (math.pi*(0.5*inp_dic.get("design").get("diameter") - input.get("fuel").get("tTank")) ** 2)
+
+    inp_dic["oxPres"]["Pinit"] = 3500 * inp_dic.get("settings").get("cnv")
+    inp_dic["oxPres"]["mInit"] = inp_dic.get("oxPres").get("vTank") * inp_dic.get("oxPres").get("Rhoinit")
+
+    inp_dic["ox"]["Pinit"] = 525 * inp_dic.get("settings").get("cnv")
+    inp_dic["ox"]["vTank"] = inp_dic.get("ox").get("mInit") * (1 + inp_dic.get("ox").get("ullage")) / inp_dic.get("ox").get("Rhoinit")
+    inp_dic["ox"]["lTank"] = inp_dic.get("ox").get("vTank") / (math.pi*(0.5*inp_dic.get("design").get("diameter") - input.get("ox").get("tTank")) ** 2)
+
+    inp_dic["props"] = cellss(4, 3)
+    inp_dic["props"][0][0] = 'Pressurant'
+    inp_dic["props"][0][1] = inp_dic.get("fPres")
+    inp_dic["props"][0][2] = 0
+    inp_dic["props"][1][0] = 'Fuel'
+    inp_dic["props"][1][1] = inp_dic.get("fuel")
+    inp_dic["props"][1][2] = 1
+    inp_dic["props"][2][0] = 'Pressurant'
+    inp_dic["props"][2][1] = inp_dic.get("oxPres")
+    inp_dic["props"][2][2] = 0
+    inp_dic["props"][3][0] = 'Oxidizer'
+    inp_dic["props"][3][1] = inp_dic.get("ox")
+    inp_dic["props"][3][2] = 3   
+
     """
     look into what to do with:
     input.fPres.Pinit
     input.fPres.mInit 
-    input.fuel.lTank
+    input.fuel.lTank (read from mass budget)
     input.fuel.Pinit
     input.fuel.vTank
     input.fuel.lTank
@@ -31,6 +60,8 @@ def houbolt_jr_single(inp_path):
     input.ox.vTank
     input.ox.lTank
     all of props
+
+    completed except lTank
     """
 
     return inp_dic
