@@ -21,8 +21,26 @@
         "numTanks" : 0
     },
 
-    "Mass Budget" : {
-        "url" : "1aMlNNq1Of8uMEjFZNS5RNAU0nOtnL61rxDccyHFwKFM"
+    "mass" : {
+        "url" : "1aMlNNq1Of8uMEjFZNS5RNAU0nOtnL61rxDccyHFwKFM",
+        "dry" : 50.41
+    },
+
+    "design" : {
+        "tBurn" : 8.4,
+        "mDotox" : 0.8,
+        "thetaL" : 3,
+        "diameter" : 0.1524,
+        "Pcc" : 350,
+        "OF" : 3,
+        "injCd" : 0.4
+    },
+
+    "sim" : {
+        "numpt" : 100,
+        "relax" : 0.3,
+        "altConvCrit" : 50,
+        "altBO" : 1000
     },
 
     "fPres" : {

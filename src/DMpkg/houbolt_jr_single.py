@@ -18,6 +18,8 @@ def houbolt_jr_single(inp_path):
     # oxPres_dic = inp_dic.get("oxPres")
     # oxPres_dic = inp_dic.get("oxPres")
 
+    # inp_dic["mass"]["data"] = get_mass_budget(inp_dic.get("mass").get("data"))
+    
     inp_dic["fPres"]["Pinit"] = 3500 * inp_dic.get("settings").get("cnv")
     inp_dic["fPres"]["mInit"] = inp_dic.get("fPres").get("vTank") * inp_dic.get("fPres").get("Rhoinit")
 
@@ -61,7 +63,9 @@ def houbolt_jr_single(inp_path):
     input.ox.lTank
     all of props
 
-    completed except lTank
+    completed except:
+    input.fuel.lTank
+    and input.mass.data
     """
 
     return inp_dic
