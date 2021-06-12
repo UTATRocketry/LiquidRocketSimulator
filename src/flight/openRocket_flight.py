@@ -124,6 +124,7 @@ class openRocket_flight():
         self.begin_time = t[0]
         self.end_time = t[-1]
         self.recovery_time = self.events[FlightEvent.RECOVERY_DEVICE_DEPLOYMENT][0]
+        self.apogee_time = self.events[FlightEvent.APOGEE]
 
         # position of the rocket wrt the launch site, units in meter and second
         sx = self.kinematics_dynamics.TYPE_POSITION_X
@@ -189,22 +190,11 @@ class openRocket_flight():
 
         self.runned = True
 
-'''
     def state_vector_function(self, time):
         if not self.runned:
             raise Exception("Run the class before calling this function.")
-        t = self.simulation_information.TYPE_TIME
+        t = self.state_vector[0]
         s = self.state_vector
         if time < t[0] or time > t[-1]:
             print("Given time is out of bounds.")
-        return np.array([np.interp(time,t,(s.T)[i]) for i in range(18)])
-
-    def quaternion_function(self, time):
-        if not self.runned:
-            raise Exception("Run the class before calling this function.")
-        t = self.simulation_information.TYPE_TIME
-        q = self.quaternion
-        if time < t[0] or time > t[-1]:
-            print("Given time is out of bounds.")
-        return np.array([np.interp(time,t,(q.T)[i]) for i in range(4)])
-'''
+        return np.array([np.interp(time,t,s[i]) for i in range(len(s))])
