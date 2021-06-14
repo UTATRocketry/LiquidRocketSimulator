@@ -3,27 +3,18 @@ The Python 3D rendering engine is adapted from
 https://github.com/hnhaefliger/pyEngine3D
 '''
 import graphics.engine
+from graphics.item import Item
 
-points = []
-triangles = []
+rocket = Item("Rocket")
+plane = Item("Plane",len(rocket.points))
 
-with open('graphics/RocketV.txt', 'r') as f:
-    lines = f.readlines()
-    for line in lines:
-        coords = line[:-2].split(' ')
-        points.append([float(coords[0]), float(coords[1]), float(coords[2])])
-    f.close()
+canvas = graphics.engine.Engine3D([rocket,plane], distance=100, title='Rocket', background='cyan')
 
-with open('graphics/RocketT.txt', 'r') as f:
-    lines = f.readlines()
-    for line in lines:
-        coords = line[:-2].split(' ')
-        newCoords = []
-        for coord in coords[1:4]:
-            newCoords.append(int(coord)-1)
-        triangles.append(newCoords)
-    f.close()
+def animation():
+    canvas.clear()
+    rocket.move("y",0.01)
+    canvas.render()
+    canvas.screen.after(1, animation)
 
-test = graphics.engine.Engine3D(points, triangles, title='Rocket', background='cyan')
-test.render()
-test.screen.window.mainloop()
+animation()
+canvas.screen.window.mainloop()

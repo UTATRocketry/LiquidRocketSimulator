@@ -43,7 +43,7 @@ class Vertex:
         if axis == 'x':
             self.x += value
         elif axis == 'y':
-            self.y += value
+            self.y -= value
         elif axis == 'z':
             self.z += value
         else:
