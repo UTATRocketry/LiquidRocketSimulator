@@ -4,6 +4,13 @@ import graphics.vertex
 import numpy as np
 
 class Engine3D:
+    def __zero_camera(self, event):
+        self.distance = 100
+        self.scale = 100
+        self.screen.zeros[0] = 500
+        self.screen.zeros[1] = 350
+        self.camera = np.identity(3)
+
     def __resetDrag(self, event):
         self.__prev_drag = []
         self.__prev_pan = []
@@ -38,7 +45,7 @@ class Engine3D:
         #     item.rotate(axis, angle)
         pass
 
-    def __init__(self, items, width=1000, height=700, distance=10, scale=100, title='3D', background='white'):
+    def __init__(self, items, width=1000, height=700, distance=100, scale=100, title='3D', background='white'):
         #object parameters
         self.items = items
         self.distance = distance
@@ -53,6 +60,7 @@ class Engine3D:
         self.__prev_pan = []
         self.screen.window.bind('<ButtonRelease-2>', self.__resetDrag)
         self.screen.window.bind('<MouseWheel>', self.__zoom)
+        self.screen.window.bind('<space>', self.__zero_camera)
 
     def clear(self):
         #clear display
@@ -81,11 +89,11 @@ class Engine3D:
         new_triangles = []
         for triangle in triangles:
             avgZ = -(new_points[triangle.a].z + new_points[triangle.b].z + new_points[triangle.c].z) / 3
-            new_triangles.append((flattened[triangle.a], flattened[triangle.b], flattened[triangle.c], triangle.color, avgZ))
+            new_triangles.append((flattened[triangle.a], flattened[triangle.b], flattened[triangle.c], triangle.color, triangle.border, avgZ))
 
         #sort triangles from furthest back to closest
-        new_triangles = sorted(new_triangles,key=lambda x: x[4])
+        new_triangles = sorted(new_triangles,key=lambda x: x[5])
 
         #draw triangles
         for triangle in new_triangles:
-            self.screen.createTriangle(triangle[0:3], triangle[3])
+            self.screen.createTriangle(triangle[0:3], triangle[3], triangle[4])

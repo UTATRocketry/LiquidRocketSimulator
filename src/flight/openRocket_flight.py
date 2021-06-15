@@ -288,6 +288,7 @@ class openRocket_flight():
                 'Roll':self.euler_angle[2]}
             self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angle', '(rad)', "Euler Angle vs. Time Plot", style, exclusion)
 
+        # angular velocity
         if "all" in arg or "omega" in arg:
             datas_dict = {
                 'omega_x1':self.state_vector[14],
@@ -296,6 +297,7 @@ class openRocket_flight():
                 'l2 normal':np.sqrt(self.state_vector[14]**2+self.state_vector[15]**2+self.state_vector[16]**2)}
             self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angular Velocity', '(rad/s)', "Angular Velocity vs. Time Plot", style, exclusion)
 
+        # angular acceleration
         if "all" in arg or "alpha" in arg:
             datas_dict = {
                 'alpha_x1':self.state_vector[17],
@@ -303,6 +305,34 @@ class openRocket_flight():
                 'alpha_x3':self.state_vector[19],
                 'l2 normal':np.sqrt(self.state_vector[17]**2+self.state_vector[18]**2+self.state_vector[19]**2)}
             self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angular Acceleration', '(rad/s2)', "Angular Acceleration vs. Time Plot", style, exclusion)
+
+        # flight path visualization
+        if "all" in arg or "animation" in arg:
+            import graphics.engine
+            from graphics.item import Item, LineItem
+            rocket = Item("Rocket", color='white')
+            plane = Item("Plane", prev_item=rocket, border='same')
+            trajectory = LineItem("T", [[0,0,0],[0,0,0]], prev_item=plane, color='red')
+
+            canvas = graphics.engine.Engine3D([rocket,plane,trajectory], distance=100, title='Rocket', background='cyan')
+
+            global _animationStep
+            _animationStep = 0
+            def animation():
+                global _animationStep
+                canvas.clear()
+                x = self.euler_axis[0][_animationStep]/100
+                y = self.euler_axis[2][_animationStep]/100
+                z = self.euler_axis[1][_animationStep]/100
+                rocket.move_to((x,y,z))
+                trajectory.add_point([x,-y,z])
+                _animationStep += 1
+                canvas.render()
+                if _animationStep <= 1210:
+                    canvas.screen.after(10, animation)
+
+            animation()
+            canvas.screen.window.mainloop()
 
     def _custom_plot(self, x_data, datas_dict, x_label, x_unit, y_label, y_unit, title, style, exclusion):
         datas_dict = {k:v for k,v in datas_dict.items() if k not in exclusion}
