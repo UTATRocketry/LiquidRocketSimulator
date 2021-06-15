@@ -16,7 +16,7 @@ class Vertex:
 
     def rotate(self, axis, angle):
         #rotate point around axis
-        angle = angle / 450 * 180 / math.pi
+        #angle = angle / 450 * 180 / math.pi
         sqrt2 = math.sqrt(2)
         if axis == 'z':
             #rotate aroud Z axis

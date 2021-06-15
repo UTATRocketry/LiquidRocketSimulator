@@ -1,6 +1,7 @@
 import graphics.screen
 import graphics.face
 import graphics.vertex
+import numpy as np
 
 class Item:
     def _update_v_offset(self, n_points=None):
@@ -68,6 +69,8 @@ class Item:
 
     def rotate(self, axis, angle):
         #rotate model around axis
+        if np.isnan(angle):
+            angle = 0
         for point in self.points:
             point.rotate(axis, angle)
 
@@ -76,7 +79,6 @@ class Item:
             point.move(axis, value)
 
     def move_to(self, value):
-        self.restore()
         self.move('x',value[0])
         self.move('y',value[1])
         self.move('z',value[2])

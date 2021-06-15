@@ -3,6 +3,7 @@ import platform
 import shutil
 
 import numpy as np
+import tkinter as tk
 from matplotlib import pyplot as plt
 
 import orhelper
@@ -318,17 +319,24 @@ class openRocket_flight():
 
             global _animationStep
             _animationStep = 0
+            timeMax = self.state_vector[0][-1]
             def animation():
                 global _animationStep
                 canvas.clear()
-                x = self.euler_axis[0][_animationStep]/100
-                y = self.euler_axis[2][_animationStep]/100
-                z = self.euler_axis[1][_animationStep]/100
+                rocket.restore()
+                rocket.rotate("y",self.value_of(self.euler_angle[2],_animationStep))
+                rocket.rotate("z",np.pi/2-self.value_of(self.euler_angle[0],_animationStep))
+                rocket.rotate("y",self.value_of(self.euler_angle[1],_animationStep))
+                x = self.value_of(self.euler_axis[0],_animationStep)/100
+                y = self.value_of(self.euler_axis[2],_animationStep)/100
+                z = self.value_of(self.euler_axis[1],_animationStep)/100
                 rocket.move_to((x,y,z))
                 trajectory.add_point([x,-y,z])
-                _animationStep += 1
+                _animationStep += 0.05
                 canvas.render()
-                if _animationStep <= 1210:
+                Round = lambda x, n: eval('"%.'+str(int(n))+'f" % '+repr(int(x)+round(float('.'+str(float(x)).split('.')[1]),n)))
+                canvas.screen.image.create_text(10, 10, text='t='+str(Round(_animationStep, 2))+'s', anchor=tk.NW)
+                if _animationStep <= timeMax:
                     canvas.screen.after(10, animation)
 
             animation()
