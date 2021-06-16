@@ -123,7 +123,7 @@ def _plot_alpha(flight_run, style, exclusion):
 def _plot_animation(flight_run, style, exclusion):
     import graphics.engine
     from graphics.item import Item, LineItem
-    rocket = Item("Rocket", color='white')
+    rocket = Item("Rocket", border='same')
     plane = Item("Plane", prev_item=rocket, border='same')
     trajectory = LineItem("T", [[0,0,0],[0,0,0]], prev_item=plane, color='red')
 

@@ -53,6 +53,12 @@ class Item:
                     newCoords = []
                     for coord in coords[1:4]:
                         newCoords.append(int(coord))
+
+                    if coords[0]=='w':
+                        newCoords.append('white')
+                    elif coords[0]=='r':
+                        newCoords.append('red')
+
                     triangles.append(newCoords)
                 f.close()
 
