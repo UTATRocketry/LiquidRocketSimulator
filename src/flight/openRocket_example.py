@@ -16,7 +16,7 @@
 
 from openRocket_flight import *
 
-flight_run = openRocket_flight("Houbolt_Jr.ork", "utat_test.rse")  # Input .ork and .rse files used for the simulation
+flight_run = openRocket_flight("Houbolt_Jr - Copy.ork", "utat_test.rse")  # Input .ork and .rse files used for the simulation
 flight_run.run()  # This command will run the simulation through the openRocket_flight.py file.
 
 '''To access the variables received from the simulation, use the following format: flight_run.UTAT_family.TYPE'''
@@ -49,4 +49,4 @@ ax.set_ylim3d([-1000, 1000])
 ax.set_zlim3d([0, 3000])
 plt.show()
 
-flight_run.plot()
+#flight_run.plot()
