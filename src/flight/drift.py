@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+from openRocket_flight import *
 
 def temperature(h):
     # h: cur_height; unit: m
@@ -46,6 +47,8 @@ def gaussianWithNoise(h):
     return gauArray+noise # signal+noise
 
 def main():
+    flight_run = openRocket_flight("Houbolt_Jr.ork", "utat_test.rse")
+    flight_run.run()
     # parameters
     apogee = flight_run.state_vector_function(flight_run.apogee_time)[3] # m
     m = flight_run.value_of(flight_run.rocket_properties.TYPE_MASS,flight_run.apogee_time) # kg
@@ -113,7 +116,7 @@ def main():
     colors = np.random.rand(1000)
     plt.scatter(xposition_final,yposition_final, s=1, c=colors, alpha=0.5)
     plt.gca().update(dict(title='Wind Porfile Model', xlabel='x position (m)', ylabel='y position (m)', ylim=(0,10)))
-    plt.axis([-1000, 1000, -1000, 1000])
+    plt.axis([-4500, 4500, -4500, 4500])
     plt.plot(np.mean(xposition_final),np.mean(yposition_final),color='b',marker='o')
     plt.plot(0,0,color="b",marker='.')
     plt.grid()
