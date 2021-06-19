@@ -1,5 +1,6 @@
 import numpy as np
 import tkinter as tk
+import math
 from matplotlib import pyplot as plt
 
 def _custom_plot(x_data, datas_dict, x_label, x_unit, y_label, y_unit, title, style, exclusion):
@@ -120,6 +121,26 @@ def _plot_alpha(flight_run, style, exclusion):
         'l2 normal':np.sqrt(flight_run.state_vector[17]**2 + flight_run.state_vector[18]**2 + flight_run.state_vector[19]**2)}
     _custom_plot(t, datas_dict, 'Time', '(s)', 'Angular Acceleration', '(rad/s2)', "Angular Acceleration vs. Time Plot", style, exclusion)
 
+def _plot_path(flight_run, style, exclusion):
+    ax = plt.axes(projection='3d')
+    x = flight_run.state_vector[1]
+    y = flight_run.state_vector[2]
+    z = flight_run.state_vector[3]
+
+    maximum = max(max(x), max(y))
+    minimum = min(min(x), min(y))
+
+    maximum = int(math.ceil(maximum / 1000.0)) * 1000
+    minimum = abs(int(math.ceil(minimum / 1000.0)) * 1000)
+
+    maximum = max(maximum,minimum)
+
+    ax.plot(x, y, z)
+    ax.set_xlim3d([-1*maximum, maximum])
+    ax.set_ylim3d([-1*maximum, maximum])
+    ax.set_zlim3d([0, int(math.ceil(max(z) / 1000.0)) * 1000])
+    plt.show()
+
 def _plot_animation(flight_run, style, exclusion):
     import graphics.engine
     from graphics.item import Item, LineItem
@@ -176,5 +197,7 @@ def plot(flight_run, arg="All", style="Combined", exclusion=[]):
         _plot_omega(flight_run, style, exclusion)
     if "all" in arg or "alpha" in arg:
         _plot_alpha(flight_run, style, exclusion)
+    if "all" in arg or "path" in arg:
+        _plot_path(flight_run, style, exclusion)
     if "all" in arg or "3danimation" in arg:
         _plot_animation(flight_run, style, exclusion)
