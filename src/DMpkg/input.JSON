@@ -55,6 +55,7 @@
         "offset" : 0.0,
         "qdot" : 300,
         "Tinit" : 298,
+        "Pinit" : 3500,
         "Rhoinit" : 250.78
     },
 
@@ -73,6 +74,7 @@
         "ullage" : 0.05,
         "mInit" : 2.33,
         "Tinit" : 298,
+        "Pinit" : 525,
         "Rhoinit" : 788.40,
         "order" : 1,
         "offset" : 0.31
@@ -90,6 +92,7 @@
         "offset" : 0.1,
         "qdot" : 300,
         "Tinit" : 298,
+        "Pinit" : 3500,
         "Rhoinit" : 250.78
     },
 
@@ -105,6 +108,7 @@
         "MW" : 44.013,
         "mInit" : 7,
         "Tinit" : 278,
+        "Pinit" : 525,
         "Rhoinit" : 882.4013,
         "ullage" : 0.05,
         "tTank" : 0.003175,
