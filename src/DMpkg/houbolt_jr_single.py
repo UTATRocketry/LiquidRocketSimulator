@@ -6,7 +6,7 @@ from DMpkg.utilitiesClass import cellss
 def houbolt_jr_single(inp_path):
 
     with open(inp_path, "r") as f:
-            inp_dic = yaml.load(f)
+        inp_dic = yaml.load(f)
 
     # engine_dic = inp_dic.get("engine")
     # settings_dic = inp_dic.get("settings")
