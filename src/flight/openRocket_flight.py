@@ -3,6 +3,7 @@ import platform
 import shutil
 
 import numpy as np
+import tkinter as tk
 from matplotlib import pyplot as plt
 
 import orhelper
@@ -209,120 +210,5 @@ class openRocket_flight():
         return np.interp(time,t,type)
 
     def plot(self, arg="All", style="Combined", exclusion=[]):
-        if not self.runned:
-            raise Exception("Run the class before calling this function.")
-        if type(arg)!=list:
-            arg = [arg]
-        arg = [elem.lower() for elem in arg]
-        t = self.state_vector[0]
-
-        # General Info about the flight
-        if "all" in arg or "generalinfo" in arg:
-            events_to_annotate = {
-                'Recovery device deployment': self.recovery_time,
-                'Apogee': self.apogee_time,
-            }
-            fig = plt.figure()
-            ax1 = fig.add_subplot(111)
-            ax2 = ax1.twinx()
-
-            ax1.plot(t, self.state_vector[3], 'b-')
-            ax2.plot(t, self.state_vector[6], 'r-')
-            ax1.set_xlabel('Time (s)')
-            ax1.set_ylabel('Altitude (m)', color='b')
-            ax2.set_ylabel('Vertical Velocity (m/s)', color='r')
-            change_color = lambda ax, col: [x.set_color(col) for x in ax.get_yticklabels()]
-            change_color(ax1, 'b')
-            change_color(ax2, 'r')
-
-            index_at = lambda time: (np.abs(t - time)).argmin()
-            for event, times in events_to_annotate.items():
-                for time in times:
-                    ax1.annotate(event, xy=(time, self.kinematics_dynamics.TYPE_ALTITUDE[index_at(time)]), xycoords='data', xytext=(20, 0), textcoords='offset points',arrowprops=dict(arrowstyle="->", connectionstyle="arc3"))
-            ax1.grid(True)
-            ax1.set_title('General Info')
-
-            plt.show()
-
-        # position
-        if "all" in arg or "position" in arg:
-            datas_dict = {
-                'x Position':self.state_vector[1],
-                'y Position':self.state_vector[2],
-                'Altitude':self.state_vector[3],
-                'l2 normal':np.sqrt(self.state_vector[1]**2+self.state_vector[2]**2+self.state_vector[3]**2)}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Position', '(m)', "Position vs. Time Plot", style, exclusion)
-
-        # velocity
-        if "all" in arg or "velocity" in arg:
-            datas_dict = {
-                'v_x':self.state_vector[4],
-                'v_y':self.state_vector[5],
-                'v_z':self.state_vector[6],
-                'l2 normal':np.sqrt(self.state_vector[4]**2+self.state_vector[5]**2+self.state_vector[6]**2)}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Velocity', '(m/s)', "Velocity vs. Time Plot", style, exclusion)
-
-        # acceleration
-        if "all" in arg or "acceleration" in arg:
-            datas_dict = {
-                'a_x':self.state_vector[7],
-                'a_y':self.state_vector[8],
-                'a_z':self.state_vector[9],
-                'l2 normal':np.sqrt(self.state_vector[7]**2+self.state_vector[8]**2+self.state_vector[9]**2)}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Acceleration', '(m/s2)', "Acceleration vs. Time Plot", style, exclusion)
-
-        # quaternion
-        if "all" in arg or "quaternion" in arg:
-            datas_dict = {
-                'w':self.state_vector[10],
-                'x':self.state_vector[11],
-                'y':self.state_vector[12],
-                'z':self.state_vector[13]}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Quaternion', '', "Quaternion vs. Time Plot", style, exclusion)
-
-        # euler angles
-        if "all" in arg or "angle" in arg or "euler angle" in arg:
-            datas_dict = {
-                'Pitch':self.euler_angle[0],
-                'Yaw':self.euler_angle[1],
-                'Roll':self.euler_angle[2]}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angle', '(rad)', "Euler Angle vs. Time Plot", style, exclusion)
-
-        if "all" in arg or "omega" in arg:
-            datas_dict = {
-                'omega_x1':self.state_vector[14],
-                'omega_x2':self.state_vector[15],
-                'omega_x3':self.state_vector[16],
-                'l2 normal':np.sqrt(self.state_vector[14]**2+self.state_vector[15]**2+self.state_vector[16]**2)}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angular Velocity', '(rad/s)', "Angular Velocity vs. Time Plot", style, exclusion)
-
-        if "all" in arg or "alpha" in arg:
-            datas_dict = {
-                'alpha_x1':self.state_vector[17],
-                'alpha_x2':self.state_vector[18],
-                'alpha_x3':self.state_vector[19],
-                'l2 normal':np.sqrt(self.state_vector[17]**2+self.state_vector[18]**2+self.state_vector[19]**2)}
-            self._custom_plot(t, datas_dict, 'Time', '(s)', 'Angular Acceleration', '(rad/s2)', "Angular Acceleration vs. Time Plot", style, exclusion)
-
-    def _custom_plot(self, x_data, datas_dict, x_label, x_unit, y_label, y_unit, title, style, exclusion):
-        datas_dict = {k:v for k,v in datas_dict.items() if k not in exclusion}
-        if style=="Combined":
-            for label,data in datas_dict.items():
-                plt.plot(x_data, data, label=label)
-            plt.xlabel(x_label+" "+x_unit)
-            plt.ylabel(y_label+" "+y_unit)
-            plt.title(title)
-            plt.legend()
-            plt.show()
-        elif style=="Staggered":
-            fig, ax = plt.subplots(nrows=len(datas_dict), sharex=True)
-            ax[0].set_title(title)
-            indx=-1
-            for label,data in datas_dict.items():
-                indx+=1
-                ax[indx].plot(x_data, data)
-                ax[indx].set_ylabel(label+" "+y_unit)
-            ax[indx].set_xlabel(x_label+" "+x_unit)
-            plt.show()
-        else:
-            print("Please choose a valid style from\n    'Combined'\n    'Staggered'")
+        import openRocket_plot
+        openRocket_plot.plot(self,arg, style, exclusion)
