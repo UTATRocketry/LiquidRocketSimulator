@@ -40,6 +40,7 @@ sim:
 
 fPres:
   name: N2                                                      # Nitrogen                                          [char]
+  fluidtype: Pressurant                                         # Fluid type                                        [str]
   frac: 100                                                     # Fraction                                          [#]
   MW: 28                                                        # Molar mass                                        [g/mol]
   Cp: 28883                                                     # Heat capacity                                     [J/kmol K]
@@ -75,6 +76,7 @@ fuel:
   offset: 0.31                                                  # Distance till next comp.                          [m]
 
 oxPres:
+<<<<<<< Updated upstream
   name: N2                                                      # Nitrogen                                          [str]
   frac: 100                                                     # Fraction                                          [#]
   MW: 28                                                        # Molar mass                                        [g/mol]
@@ -88,6 +90,22 @@ oxPres:
   Tinit: 298                                                    # Initial temperature                               [K]
   Pinit: 3500                                                   # Initial pressure                                  [psi]
   Rhoinit: 250.78                                               # Initial density                                   [kg/m^3]
+=======
+  name: N2                                                      # Nitrogen                      [str]
+  fluidtype: Pressurant                                         # Fluid type                    [str]
+  frac: 100                                                     # Fraction                      [#]
+  MW: 28                                                        # Molar mass                    [g/mol]
+  Cp: 28883                                                     # Heat capacity                 [J/kmol K]
+  mTank: 0.788                                                  # Tank mass                     [kg]?
+  lTank: 0.2                                                    # READ FROM MASS BUDGET         [m]
+  vTank: 0.002                                                  # READ FROM MASS BUDGET         [m^3]
+  tTank: 0.003175                                               # Tank thickness                [m]?
+  offset: 0.1                                                   # Distance till next comp.      [m]
+  qdot: 300                                                     # Heat flux                     [W]
+  Tinit: 298                                                    # Initial temperature           [K]?
+  Pinit: 3500                                                   # Initial pressure              [psi]?
+  Rhoinit: 250.78                                               # Initial density               [kg/m^3]?
+>>>>>>> Stashed changes
 
 ox:
   isPropellant: true                                            # Propellant flag                                   [bool]

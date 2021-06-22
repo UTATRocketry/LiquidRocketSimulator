@@ -6,10 +6,12 @@ class fluidClass:
     def __init__(self, input, inputTag) -> None:
 
         self.phase                  = 0   # 1 if pressurant, 2 else
-        if inputTag["name"] == 'N2':
+        if inputTag["fluidtype"] == 'Pressurant':
             self.phase              = 1
-        else:
+        elif inputTag["fluidtype"] == "Fuel" or inputTag["fluidtype"] == "Oxidizer":
             self.phase              = 2
+        else:
+            raise Exception("Invalid inputTag entered")
         
         self.m                      = np.zeros((input['sim']['numpt'], self.phase))
         self.mdot                   = np.zeros((input['sim']['numpt'], self.phase))
