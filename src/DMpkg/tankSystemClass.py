@@ -1,32 +1,33 @@
 import DMpkg as rocket
 import numpy as np
+from utilitiesClass import cellss
+
 class tankSystemClass:
     
-    def tankSystemClass(input):
-        obj.input = input
-        obj.designVars = input.design
-        obj.tanks = cell(size(input.props,1),1)
-        obj.tank_inputs = input.props
-        obj.create_tanks()
+    def __init__(self, input):
+        self.input = input
+        self.designVars = input.design
+        self.tanks = cellss(len(input.props,1),1)
+        self.tank_inputs = input.props
+        self.create_tanks()
         # other properties m,cg,l should not need to be initialized as they are arrays
-        return obj
 
-    def create_tanks(obj):
+    def create_tanks(self):
 
-        for i in range(0,length(obj.tank_inputs)):
-            type = obj.tank_inputs[i][0]
+        for i in range(0,len(self.tank_inputs)):
+            type = self.tank_inputs[i][0]
             if (type== 'Fuel') or (type == 'Oxidizer'):
-                obj.tanks[i][0]      = propellantTankClass(obj.input, obj.input.props[i][1])
+                self.tanks[i][0]      = rocket.propellantTankClass(self.input, self.input.props[i][1])
             elif (type== 'Pressurant'):
-                obj.tanks[i][0]      = pressurantTankClass(obj.input, obj.input.props[i][1])
+                self.tanks[i][0]      = rocket.pressurantTankClass(self.input, self.input.props[i][1])
             else:
-                error('Incorrect tank type.')
-        return obj
+                raise Exception('Incorrect tank type.')
+        return self
                 
             
         
        
-    def getCG(obj):
+    def getCG(self):
             
         totalLength = 0
         totalMass = 0 
@@ -34,18 +35,18 @@ class tankSystemClass:
 
         # run getCG for each tank
 
-        for i in range(1,size(obj.tanks,1)):
-            obj.tanks[i][1].getCG()
+        for i in range(1,len(self.tanks,1)):
+            self.tanks[i][1].getCG()
                 
-            momCurr = obj.tanks[i][1].m *(totalLength + obj.tanks[i][1].offset + obj.tanks[i][1].cg)
+            momCurr = self.tanks[i][1].m *(totalLength + self.tanks[i][1].offset + self.tanks[i][1].cg)
                 
-            totalLength = totalLength + obj.tanks[i][1].l + obj.tanks[i][1].offset 
+            totalLength = totalLength + self.tanks[i][1].l + self.tanks[i][1].offset 
             totalMoment = totalMoment + momCurr
-            totalMass = totalMass + obj.tanks[i][1].m
+            totalMass = totalMass + self.tanks[i][1].m
             
             
-        obj.cg  = totalMoment / totalMass
-        obj.m   = totalMass
-        obj.l = totalLength
+        self.cg  = totalMoment / totalMass
+        self.m   = totalMass
+        self.l = totalLength
 
  
