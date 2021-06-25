@@ -1,6 +1,5 @@
 import numpy as np
 import DMpkg as rocket
-from DMpkg.utilitiesClass import cellss
 
 class fluidClass:
     def __init__(self, input, inputTag) -> None:
@@ -29,11 +28,11 @@ class fluidClass:
 
     def setInitialConditions(self, inputTag):
 
-        self.IC.m                   = inputTag["mInit"];
-        self.IC.T                   = inputTag["Tinit"];
-        self.IC.P                   = inputTag["Pinit"];
-        self.IC.rho                 = inputTag["Rhoinit"];
-        self.IC.n                   = self.IC.m/self.MW;
+        self.IC.m                   = inputTag["mInit"]
+        self.IC.T                   = inputTag["Tinit"]
+        self.IC.P                   = inputTag["Pinit"]
+        self.IC.rho                 = inputTag["Rhoinit"]
+        self.IC.n                   = self.IC.m/self.MW
         
         self.initializeMass(self, self.IC.m)
         self.initializeTemperature(self, self.IC.T)

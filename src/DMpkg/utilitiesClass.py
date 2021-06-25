@@ -80,7 +80,8 @@ class utilitiesClass:
         self.nitrogen.Coefs.C5   = 0
 
         self.nitrogen.h          = rocket.propertyClass()
-        self.nitrogen.h.theta    = [0.90370032155133,\
+        # is this what we want to do?
+        self.nitrogen.h.theta    = np.array([0.90370032155133,\
                                       -3.99164830787538,\
                                        4.44554878990612,\
                                       -1.68387394930366,\
@@ -88,9 +89,9 @@ class utilitiesClass:
                                       -2.71807522455834,\
                                        1.80658523674363,\
                                       -0.00026662830718,\
-                                       0.16405364316350]
+                                       0.16405364316350])
 
-        self.nitrogen.h.alpha    = [1,               \
+        self.nitrogen.h.alpha    = np.array([1,               \
                                        0.45607085009281,\
                                        0.99224794564113,\
                                        1.58495789262624,\
@@ -98,11 +99,11 @@ class utilitiesClass:
                                        1.29132167947510,\
                                        1.44008913900161,\
                                        2.74997487910292,\
-                                       2.36611999082672]
+                                       2.36611999082672])
                                    
         self.nitrogen.l          = rocket.propertyClass()
 
-        self.nitrogen.l.theta    = [0.46742656471647,\
+        self.nitrogen.l.theta    = np.array([0.46742656471647,\
                                       -0.53799565472298,\
                                       -9.22454428760102,\
                                        9.15603503101003,\
@@ -110,9 +111,9 @@ class utilitiesClass:
                                        0.30163700042055,\
                                       -0.27300234680706,\
                                       -1.00749719408221,\
-                                      -1.49106816983329]
+                                      -1.49106816983329])
 
-        self.nitrogen.l.alpha    = [1,               \
+        self.nitrogen.l.alpha    = np.array([1,               \
                                        1.41102397459172,\
                                        0.33562799290636,\
                                        0.79810083070486,\
@@ -120,7 +121,7 @@ class utilitiesClass:
                                        2.53968667359886,\
                                        2.51281397715323,\
                                        1.20879498088509,\
-                                       1.69572064361084]
+                                       1.69572064361084])
                                    
         self.nitrogen.Tc         = 126.2
         self.nitrogen.Pc         = 492.314
@@ -151,7 +152,7 @@ class utilitiesClass:
                 Tb      = 288.15 #Standard temperature (K)
                 Pb      = 101325 #Static pressure (Pa)
                 h0      = 0
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ^ (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ** (obj.g0*obj.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h0)
 
             elif ( 11000 <= altitude) and (altitude < 20000):
@@ -167,7 +168,7 @@ class utilitiesClass:
                 Tb      = 216.65
                 Pb      = 5474.89
                 h2      = 20000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ^ (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ** (obj.g0*obj.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h2)
 
             elif (32000 <= altitude) and (altitude < 47000):
@@ -175,7 +176,7 @@ class utilitiesClass:
                 Tb      = 228.65
                 Pb      = 868.02
                 h3      = 32000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ^ (g*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ** (g*obj.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h3)
 
             elif(47000 <= altitude) and (altitude < 51000):
@@ -191,7 +192,7 @@ class utilitiesClass:
                 Tb      = 270.65
                 Pb      = 66.94
                 h5      = 51000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ^ (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ** (obj.g0*obj.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h5)
 
             elif(71000 <= altitude) and (altitude < 86000):
@@ -199,7 +200,7 @@ class utilitiesClass:
                 Tb      = 214.65
                 Pb      = 3.96
                 h6      = 71000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ^ (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ** (obj.g0*obj.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h6)
 
             else:

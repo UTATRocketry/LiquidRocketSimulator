@@ -7,7 +7,7 @@ class tankSystemClass:
     def __init__(self, input):
         self.input = input
         self.designVars = input.design
-        self.tanks = cellss(len(input.props,1),1)
+        self.tanks = cellss(len(input.props,1),1) # doesn't strictly store values?
         self.tank_inputs = input.props
         self.create_tanks()
         # other properties m,cg,l should not need to be initialized as they are arrays

@@ -38,7 +38,7 @@ def houbolt_jr_single(inp_path):
     inp_dic["ox"]["vTank"] = inp_dic.get("ox").get("mInit") * (1 + inp_dic.get("ox").get("ullage")) / inp_dic.get("ox").get("Rhoinit")
     inp_dic["ox"]["lTank"] = inp_dic.get("ox").get("vTank") / (math.pi*(0.5*inp_dic.get("design").get("diameter") - input.get("ox").get("tTank")) ** 2)
 
-    inp_dic["props"] = cellss(4, 3)
+    inp_dic["props"] = cellss(4, 3) # cannot change to numpy array because of multiple data types
     inp_dic["props"][0][0] = 'Pressurant'
     inp_dic["props"][0][1] = inp_dic.get("fPres")
     inp_dic["props"][0][2] = 0
