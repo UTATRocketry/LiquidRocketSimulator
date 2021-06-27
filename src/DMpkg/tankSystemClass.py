@@ -37,11 +37,11 @@ class tankSystemClass:
         for i in range(1,size(self.tanks,1)):
             self.tanks[i][1].getCG()
                 
-            momCurr = np.multiply(self.tanks[i][1].m ,(totalLength + self.tanks[i][1].offset + self.tanks[i][1].cg))
+            momCurr = np.multiply(self.tanks[i][0].m ,(totalLength + self.tanks[i][0].offset + self.tanks[i][0].cg))
                 
-            totalLength = totalLength + self.tanks[i][1].l + self.tanks[i][1].offset 
+            totalLength = totalLength + self.tanks[i][0].l + self.tanks[i][0].offset 
             totalMoment = totalMoment + momCurr
-            totalMass = totalMass + self.tanks[i][1].m
+            totalMass = totalMass + self.tanks[i][0].m
             
             
         self.cg  = np.divide(totalMoment , totalMass)
