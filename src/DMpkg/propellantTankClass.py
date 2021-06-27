@@ -1,5 +1,7 @@
+from src.DMpkg.houbolt_jr_single import houbolt_jr_single
 import DMpkg as rocket
 import numpy as np
+
 class propellantTankClass:
 
     '''properties (Access = public)
@@ -40,60 +42,60 @@ class propellantTankClass:
     #   OUTPUTS ............................................................
     #     - <self> (class):    Returns created propellantTankClass
     #-----------------------------------------------------------------------
-    def propellantTankClass(self, input, tankTag):
+    def __init__(self,input, tankTag):
             
         # Populate general properties
-        self.input           = input                            # Input
+        self.input           = houbolt_jr_single()                            # Input
         self.tank_input      = tankTag                          # Input field for this tank
-        self.name            = self.tank_input.name                          # Propellant name
-        self.type            = self.tank_input.fluidtype                     # Propellant type
-        self.m               = zeros(input.sim.numpt, 1)        # Mass
-        self.l               = self.tank_input.lTank
-        self.cg              = zeros(input.sim.numpt, 1)        # CG
-        self.offset          = self.tank_input.offset                        # Offset distance
+        self.name            = self.tank_input.get("name")                         # Propellant name
+        self.type            = self.tank_input.get("fluidtype")                     # Propellant type
+        self.m               = np.zeros((input.sim.numpt, 1))        # Mass
+        self.l               = self.tank_input.get("lTank")
+        self.cg              = np.zeros((input.sim.numpt, 1))        # CG
+        self.offset          = self.tank_input.get("offset")                        # Offset distance
             
         # Create utilities property
-        self.util            = utilitiesClass(input)
+        self.util            = rocket.utilitiesClass(input)
 
         # Populate tank struct
-        self.tank            = propertyClass()
-        self.tank.t          = self.tank_input.tTank                         # Wall thickness
-        self.tank.m          = self.tank_input.mTank                         # Mass
-        self.tank.v          = self.tank_input.vTank                         # Volume
-        self.tank.cg         = self.tank_input.lTank/2                       # CG location
+        self.tank            = rocket.propertyClass()
+        self.tank.t          = self.tank_input.get("tTank")                         # Wall thickness
+        self.tank.m          = self.tank_input.get("mTank")                         # Mass
+        self.tank.v          = self.tank_input.get("vTank")                         # Volume
+        self.tank.cg         = self.tank_input.get("lTank")/2                       # CG location
             
         self.prop_name       = self.propName()
         self.prop_name_cp    = self.propName_cp()
         self.pres_name       = self.presName()
         self.pres_name_cp    = self.presName_cp()  
     
-        rho                 = self.util.cp('D', 'T', self.tank_input.Tinit, 'P', self.tank_input.Pinit, self.prop_name_cp)
-        self.tank.ullage     = self.tank.v - self.tank_input.mInit / rho
+        rho                 = self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp)
+        self.tank.ullage     = self.tank.v - self.tank_input.get("mInit") / rho
 
         # Initialize propellant liquid phase
-        self.propellant      = twoPhaseFluidClass(input, tankTag)
+        self.propellant      = rocket.twoPhaseFluidClass(input, tankTag)
 
-        initStruct.T        = [self.tank_input.Tinit, self.tank_input.Tinit]
-        initStruct.P        = [self.tank_input.Pinit, self.tank_input.Pinit]
-        initStruct.m        = [self.tank_input.mInit, 0]
-        initStruct.rho      = [self.util.cp('D', 'T', self.tank_input.Tinit, 'P', self.tank_input.Pinit, self.prop_name_cp), \
-                                self.util.cp('D', 'T', self.tank_input.Tinit, 'Q', 1, self.prop_name_cp)]
+        initStruct.T        = [self.tank_input.get("Tinit"), self.tank_input.get("Tinit")]
+        initStruct.P        = [self.tank_input.get("Pinit"), self.tank_input.get("Pinit")]
+        initStruct.m        = [self.tank_input.get("mInit"), 0]
+        initStruct.rho      = [self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp), \
+                                self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'Q', 1, self.prop_name_cp)]
             
         self.propellant.setInitialConditions(initStruct)
 
         # Initialize pressurant vapor phase
-        exec("self.pressurant      = FluidClass(input, self.input.(" + self.tank_input.pressurant+"))")    # come back to this when fluidclass inputs are done
+        exec("self.pressurant      = rocket.FluidClass(input, self.input.(" + self.tank_input.get("pressurant")+"))")    # come back to this when fluidclass inputs are done
 
-        initStruct.T        = self.tank_input.Tinit
-        initStruct.P        = self.tank_input.Pinit
+        initStruct.T        = self.tank_input.get("Tinit")
+        initStruct.P        = self.tank_input.get("Pinit")
         initStruct.m        = self.tank.ullage*self.util.cp('D', 'T', initStruct.T, 'P', initStruct.P, self.pres_name_cp)
-        initStruct.rho      = self.util.cp('D', 'T', self.tank_input.Tinit, 'P', self.tank_input.Pinit, self.prop_name_cp)
+        initStruct.rho      = self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp)
             
         self.pressurant.setInitialConditions(initStruct)
 
         # Flag tank if its pressurized
-        self.isPressurized   = self.tank_input.isPressurized
-        self.pressurantOrder = self.tank_input.pressurantOrder
+        self.isPressurized   = self.tank_input.get("isPressurized")
+        self.pressurantOrder = self.tank_input.get("pressurantOrder")
 
         # Select blowdown def
         self.setBlowdownCharacteristics()
@@ -113,19 +115,19 @@ class propellantTankClass:
     def getBlowdown(self):
 
         if self.type == 'Oxidizer':
-            if self.tank_input.blowdownMode == 'unpressurized':
+            if self.tank_input.get("blowdownMode") == 'unpressurized':
                 self.OX_Blowdown()
-            elif self.tank_input.blowdownMode == 'constantPressure':
+            elif self.tank_input.get("blowdownMode") == 'constantPressure':
                 self.OX_constantPressureBlowdown()
             else:
-                error('Blowdown mode #s has not been specialized', self.input.design.presMode)
+                raise Exception('Blowdown mode #s has not been specialized'+ self.input.design.presMode)
         elif self.type == 'Fuel':
-            if self.tank_input.blowdownMode == 'constantMdot':
+            if self.tank_input.get("blowdownMode") == 'constantMdot':
                 self.FUEL_constantMdotBlowdown()
             else:
-                error('Blowdown mode #s has not been specialized', self.input.design.presMode)
+                raise Exception('Blowdown mode #s has not been specialized'+ self.input.design.presMode)
         else:
-            error('Propellant type #s unknown. Type can either be Oxidizer or Fuel', self.type)
+            raise Exception('Propellant type #s unknown. Type can either be Oxidizer or Fuel'+ self.type)
             
         
 
@@ -143,14 +145,14 @@ class propellantTankClass:
             if (self.name== 'N2O'):
                 self.propellant.bdChars  = self.bdChars_NITROUSOXIDE
             else:
-                error('Oxidizer type #s has no mass flow rate def specified', self.name)
+                raise Exception('Oxidizer type #s has no mass flow rate def specified'+ self.name)
                     
 
         elif self.type == 'Fuel':
             self.propellant.bdChars      = self.bdChars_LIQUIDS_MDOT
 
         else:
-            error('Blowdown def for propellant type #s has not been specialized.', self.type)
+            raise Exception('Blowdown def for propellant type #s has not been specialized.'+ self.type)
             
         
 
@@ -165,9 +167,9 @@ class propellantTankClass:
     #   OUTPUTS: NONE
     #-----------------------------------------------------------------------
     def OX_Blowdown(self):
-        inp                  = propertyClass()
+        inp                  = rocket.propertyClass()
         inp.mDot             = self.designVars.mDotox
-        inp.T                = self.tank_input.Tinit
+        inp.T                = self.tank_input.get("Tinit")
         inp.V                = self.tank.v
         inp.mTank            = self.tank.m
         inp.P                = self.propellant.IC.P
@@ -221,7 +223,7 @@ class propellantTankClass:
     def OX_constantPressureBlowdown(self):
 
         inp.mDot             = self.designVars.mDotox
-        inp.T                = self.tank_input.Tinit
+        inp.T                = self.tank_input.get("Tinit")
         inp.V                = self.tank.v
         inp.mTank            = self.tank.m
         inp.P                = self.propellant.IC.P
@@ -278,7 +280,7 @@ class propellantTankClass:
     def FUEL_constantMdotBlowdown(self):
 
         mdot    = self.designVars.mDotox / self.designVars.OF
-        T       = self.tank_input.Tinit
+        T       = self.tank_input.get("Tinit")
 
         self.propellant.mdot[0][0] = mdot
         dt                  = self.designVars.dt
@@ -295,7 +297,7 @@ class propellantTankClass:
         
 
     def bdChars_LIQUIDS_MDOT(mdot):
-        output = propertyClass()
+        output = rocket.propertyClass()
         output.mDot = -mdot
         return output
         
@@ -385,7 +387,7 @@ class propellantTankClass:
             # Derivative of vapour P with respect to T.
             dP_sat      = u.cp('d(P)/d(T)|D', 'T', input.T, 'Q', 1, 'N2O')
         else:
-            error('propellantTankClass > bdChars_NIROUSOXIDE(): Function has not been specialized for model type #s.', input.model)
+            raise Exception('Function has not been specialized for model type #s.' + input.model)
             
 
         # Specific heat of tank, Aluminum [J/kg*K]
@@ -432,7 +434,7 @@ class propellantTankClass:
             g           = -0.5*(k+1)/(k-1)
             input.Ainj  = input.mDot / (Cd * P * sqrt(k/(input.T*self.propellant.R)) * (0.5*(k+1))^g)
         else:
-            disp('propellantTankClass > findAinj(): WARNING, Fluid is not choked.')
+            print('WARNING, Fluid is not choked.')
             input.Ainj  = (input.mDot/MW/Cd)*sqrt(0.5*Vh*MW/(P - Pcc))
             
             
@@ -457,11 +459,11 @@ class propellantTankClass:
         return input
 
     def propName(self):
-        name = self.tank_input.name
+        name = self.tank_input.get("name")
         return name
         
     def propName_cp(self):
-        name = self.tank_input.name
+        name = self.tank_input.get("name")
             
         for i in range(0,size(self.util.coolprop_alias, 1)-1):
             if (name== self.util.coolprop_alias[i, 0]):
@@ -471,11 +473,11 @@ class propellantTankClass:
         
         
     def presName(self):
-        exec("name = self.input.(" + self.tank_input.pressurant + ").name")
+        exec("name = self.input.(" + self.tank_input.get("pressurant") + ").name")
         return name
 
     def presName_cp(self):
-        exec("name = self.input.("+self.tank_input.pressurant+").name")
+        exec("name = self.input.("+self.tank_input.get("pressurant")+").name")
             
         for i in range(0,size(self.util.coolprop_alias, 1)-1):
             if (name == self.util.coolprop_alias[i, 0]):
