@@ -40,7 +40,7 @@ class propellantTankClass:
     #   OUTPUTS ............................................................
     #     - <self> (class):    Returns created propellantTankClass
     #-----------------------------------------------------------------------
-    def propellantTankClass(input, tankTag):
+    def propellantTankClass(self, input, tankTag):
             
         # Populate general properties
         self.input           = input                            # Input

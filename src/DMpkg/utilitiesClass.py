@@ -1,5 +1,7 @@
 import numpy as np
 import DMpkg as rocket
+import coolprop #this is conjecture; we do not have access to the coolprop repo yet
+                # emerson pls gib access
 
 class utilitiesClass:
     def __init__(self, input):
@@ -126,21 +128,20 @@ class utilitiesClass:
         self.nitrogen.Tc         = 126.2
         self.nitrogen.Pc         = 492.314
             
-        #py.importlib.import_module('CoolProp.CoolProp')
-        #self.cp = load_cp.PropsSI
+        self.cp = coolprop.load_cp.PropsSI
             
-        #self.coolprop_alias = cells(1, 2)
-        #self.coolprop_alias[1][1] = 'C2H5OH'
-        #self.coolprop_alias[1] [2] = 'Ethanol'
+        self.coolprop_alias = cellss(1, 2)
+        self.coolprop_alias[1][1] = 'C2H5OH'
+        self.coolprop_alias[1] [2] = 'Ethanol'
 
 
 
 
 
-    #def coolprop(needed, p1, p1val, p2, p2val, name):
-    #    if name == 'C2H5OH':
-    #        name = 'ethanol'
-    #    output = py.CoolProp.CoolProp.PropsSI(needed, p1, p1val, p2, p2val, name)
+    def coolprop(needed, p1, p1val, p2, p2val, name):
+       if name == 'C2H5OH':
+           name = 'ethanol'
+       output = coolprop.PropsSI(needed, p1, p1val, p2, p2val, name)
 
     def stdAtmos(altitude):
 
