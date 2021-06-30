@@ -135,13 +135,11 @@ class utilitiesClass:
         self.coolprop_alias[1] [2] = 'Ethanol'
 
 
-
-
-
     def coolprop(needed, p1, p1val, p2, p2val, name):
        if name == 'C2H5OH':
            name = 'ethanol'
        output = coolprop.PropsSI(needed, p1, p1val, p2, p2val, name)
+       return output
 
     def stdAtmos(altitude):
 
