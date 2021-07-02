@@ -1,6 +1,7 @@
 from src.DMpkg.houbolt_jr_single import houbolt_jr_single
 import DMpkg as rocket
 import numpy as np
+import math
 
 class propellantTankClass:
 
@@ -206,7 +207,7 @@ class propellantTankClass:
         self.propellant.m        = self.propellant.n * self.propellant.MW
         self.pressurant.m        = self.pressurant.n * self.pressurant.MW
             
-        self.propellant.l[:, 0]  = numpy.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0] * (self.tank.r - self.tank.t)^2 * pi))
+        self.propellant.l[:, 0]  = np.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0] * (self.tank.r - self.tank.t)^2 * math.pi)) # this line doesn't work (what are we trying to do with np.divide)
         self.propellant.l[:, 1]  = self.l - self.propellant.l[0]
                 
         

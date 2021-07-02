@@ -5,7 +5,7 @@ class tankSystemClass:
     def tankSystemClass(self, input):
         self.input = input
         self.designVars = input.design
-        self.tanks = cellss(len(input.props,1),1)
+        self.tanks = cellss(len(input.props,1),1) # can't change to numpy array as elmts of array are propellant tank class objects (line 19)
         self.tank_inputs = input.props
         self.create_tanks()
         # other properties m,cg,l should not need to be initialized as they are arrays
@@ -37,14 +37,14 @@ class tankSystemClass:
         for i in range(1,len(self.tanks,1)):
             self.tanks[i][1].getCG()
                 
-            momCurr = np.multiply(self.tanks[i][0].m ,(totalLength + self.tanks[i][0].offset + self.tanks[i][0].cg))
+            momCurr = np.multiply(self.tanks[i][0].m ,(totalLength + self.tanks[i][0].offset + self.tanks[i][0].cg)) # have to make sure m, offset, and cg are numpy arrays in propellantTankClass
                 
             totalLength = totalLength + self.tanks[i][0].l + self.tanks[i][0].offset 
             totalMoment = totalMoment + momCurr
             totalMass = totalMass + self.tanks[i][0].m
             
             
-        self.cg  = np.divide(totalMoment , totalMass)
+        self.cg  = np.divide(totalMoment, totalMass)
         self.m   = totalMass
         self.l = totalLength
 

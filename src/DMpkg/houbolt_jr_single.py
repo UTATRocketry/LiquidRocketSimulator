@@ -24,32 +24,32 @@ def houbolt_jr_single(inp_path):
     conversions and calculations that cannot be handled in the input.yaml file
     """
     
-    inp_dic["fPres"]["Pinit"] = inp_dic.get("fPres").get("Pinit") * inp_dic.get("settings").get("cnv") # converting from psi to Pa
-    inp_dic["fPres"]["mInit"] = inp_dic.get("fPres").get("vTank") * inp_dic.get("fPres").get("Rhoinit")
+    inp_dic["fPres"]["Pinit"] = inp_dic["fPres"]["Pinit"] * inp_dic["settings"]["cnv"] # converting from psi to Pa
+    inp_dic["fPres"]["mInit"] = inp_dic["fPres"]["vTank"] * inp_dic["fPres"]["Rhoinit"]
 
-    inp_dic["fuel"]["Pinit"] = inp_dic.get("fuel").get("Pinit") * inp_dic.get("settings").get("cnv")
-    inp_dic["fuel"]["vTank"] = inp_dic.get("fuel").get("mInit") * (1 + inp_dic.get("fuel").get("ullage")) / inp_dic.get("fuel").get("Rhoinit") # converting from psi to Pa
-    inp_dic["fuel"]["lTank"] = inp_dic.get("fuel").get("vTank") / (math.pi*(0.5*inp_dic.get("design").get("diameter") - input.get("fuel").get("tTank")) ** 2)
+    inp_dic["fuel"]["Pinit"] = inp_dic["fuel"]["Pinit"] * inp_dic["settings"]["cnv"]
+    inp_dic["fuel"]["vTank"] = inp_dic["fuel"]["mInit"] * (1 + inp_dic["fuel"]["ullage"]] / inp_dic["fuel"]["Rhoinit"] # converting from psi to Pa
+    inp_dic["fuel"]["lTank"] = inp_dic["fuel"]["vTank"] / (math.pi*(0.5*inp_dic["design"]["diameter"] - inp_dic["fuel"]["tTank"]) ** 2)
 
-    inp_dic["oxPres"]["Pinit"] = inp_dic.get("oxPres").get("Pinit") * inp_dic.get("settings").get("cnv") # converting from psi to Pa
-    inp_dic["oxPres"]["mInit"] = inp_dic.get("oxPres").get("vTank") * inp_dic.get("oxPres").get("Rhoinit")
+    inp_dic["oxPres"]["Pinit"] = inp_dic["oxPres"]["Pinit"] * inp_dic["settings"]["cnv"] # converting from psi to Pa
+    inp_dic["oxPres"]["mInit"] = inp_dic["oxPres"]["vTank"] * inp_dic["oxPres"]["Rhoinit"]
 
-    inp_dic["ox"]["Pinit"] = inp_dic.get("ox").get("Pinit") * inp_dic.get("settings").get("cnv") # converting from psi to Pa
-    inp_dic["ox"]["vTank"] = inp_dic.get("ox").get("mInit") * (1 + inp_dic.get("ox").get("ullage")) / inp_dic.get("ox").get("Rhoinit")
-    inp_dic["ox"]["lTank"] = inp_dic.get("ox").get("vTank") / (math.pi*(0.5*inp_dic.get("design").get("diameter") - input.get("ox").get("tTank")) ** 2)
+    inp_dic["ox"]["Pinit"] = inp_dic["ox"]["Pinit"] * inp_dic["settings"]["cnv"] # converting from psi to Pa
+    inp_dic["ox"]["vTank"] = inp_dic["ox"]["mInit"] * (1 + inp_dic["ox"]["ullage"]] / inp_dic["ox"]["Rhoinit"]
+    inp_dic["ox"]["lTank"] = inp_dic["ox"]["vTank"] / (math.pi*(0.5*inp_dic["design"]["diameter"] - inp_dic["ox"]["tTank"]) ** 2)
 
     inp_dic["props"] = cellss(4, 3) # cannot change to numpy array because of multiple data types
     inp_dic["props"][0][0] = 'Pressurant'
-    inp_dic["props"][0][1] = inp_dic.get("fPres")
+    inp_dic["props"][0][1] = inp_dic["fPres"]
     inp_dic["props"][0][2] = 0
     inp_dic["props"][1][0] = 'Fuel'
-    inp_dic["props"][1][1] = inp_dic.get("fuel")
+    inp_dic["props"][1][1] = inp_dic["fuel"]
     inp_dic["props"][1][2] = 1
     inp_dic["props"][2][0] = 'Pressurant'
-    inp_dic["props"][2][1] = inp_dic.get("oxPres")
-    inp_dic["props"][2][2] = 0
+    inp_dic["props"][2][1] = inp_dic["oxPres"]
+    inp_dic["props"][2][2] = 
     inp_dic["props"][3][0] = 'Oxidizer'
-    inp_dic["props"][3][1] = inp_dic.get("ox")
+    inp_dic["props"][3][1] = inp_dic["ox"]
     inp_dic["props"][3][2] = 3   
 
     """
