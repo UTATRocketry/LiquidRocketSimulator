@@ -49,4 +49,4 @@ ax.set_ylim3d([-1000, 1000])
 ax.set_zlim3d([0, 3000])
 plt.show()
 
-flight_run.plot()
+#flight_run.plot()

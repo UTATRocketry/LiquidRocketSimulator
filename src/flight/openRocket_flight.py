@@ -209,6 +209,6 @@ class openRocket_flight():
             print("Given time is out of bounds.")
         return np.interp(time,t,type)
 
-    def plot(self, arg="All", style="Combined", exclusion=[]):
+    def plot(self, arg="All", style="Combined", exclusion=[], save=False):
         import openRocket_plot
-        openRocket_plot.plot(self,arg, style, exclusion)
+        openRocket_plot.plot(self,arg, style, exclusion, save)
