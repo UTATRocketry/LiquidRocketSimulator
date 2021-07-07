@@ -23,6 +23,9 @@ class pressurantTankClass:
         try:
             self.input                              = input
             self.tank_input                         = inputTag
+
+            # what's the difference between input and inputTag here?]
+
         except ValueError or KeyError or input == None or inputTag == None:
             raise Exception("Invalid inputs - pressurantTankClass > __init__")
         
@@ -103,7 +106,7 @@ class pressurantTankClass:
 
             self.pressurant.P(i, 1)         = self.pressurant.P(i-1, 1) + bdChars.dPdt * dt
             self.pressurant.T(i, 1)         = self.pressurant.T(i-1, 1) + bdChars.dTdt * dt
-            self.pressurant.rho(i, 1)       = self.util.coolprop('D', 'P', self.pressurant.P(i, 1), 'T', self.pressurant.T(i, 1), self.tank_input.name)
+            self.pressurant.rho(i, 1)       = self.util.coolprop('D', 'P', self.pressurant.P(i, 1), 'T', self.pressurant.T(i, 1), self.tank_input["name"])
             self.pressurant.m(i, 1)         = self.pressurant.m(i-1, 1) - self.pressurant.mdot(i, 1) * dt
     
     def bd_Chars_NITROGEN(self, input):
@@ -122,9 +125,9 @@ class pressurantTankClass:
         Z                                   = self.util.coolprop('Z', 'P', P, 'T', T, 'N2')
         cv                                  = self.util.coolprop('O', 'P', P, 'T', T, 'N2')
 
-        dPdt                                = (ma*R*Z^2 + P*V*Zt)*qdot/(V*cv*(ma*(Z - P*Zp))) - mdot*((cv + Z*R)*ma*Z + P*V*Zt)*(P/(ma*cv))/(ma*(Z - P*Zp))
-        dZdt                                = (ma*R*Z^2 * Zp + V*Z*Zt)*dPdt/(ma*R*Z^2 + Zt*P*V) - Zt*(P*V*Z/ma)*mdot/(ma*R*Z^2 + Zt*P*V)
-        dTdt                                = V*(dPdt/(ma*Z) - dZdt*P/(ma*Z^2) - mdot*P/(ma^2*Z))/R
+        dPdt                                = (ma*R*Z**2 + P*V*Zt)*qdot/(V*cv*(ma*(Z - P*Zp))) - mdot*((cv + Z*R)*ma*Z + P*V*Zt)*(P/(ma*cv))/(ma*(Z - P*Zp))
+        dZdt                                = (ma*R*Z**2 * Zp + V*Z*Zt)*dPdt/(ma*R*Z**2 + Zt*P*V) - Zt*(P*V*Z/ma)*mdot/(ma*R*Z**2 + Zt*P*V)
+        dTdt                                = V*(dPdt/(ma*Z) - dZdt*P/(ma*Z**2) - mdot*P/(ma**2*Z))/R
 
         self.dPdT                           = dPdt
         self.dTdt                           = dTdt

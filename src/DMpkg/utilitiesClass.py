@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import DMpkg as rocket
 import coolprop #this is conjecture; we do not have access to the coolprop repo yet
@@ -27,7 +28,7 @@ class utilitiesClass:
 
 
 
-        self.zeroArray           = np.zeros((input.sim.numpt, 1))
+        self.zeroArray           = np.zeros((input["sim"]["numpt"], 1))
 
         self.noxProp             = rocket.propertyClass()
         self.noxProp.rho_c       = 452
@@ -143,7 +144,7 @@ class utilitiesClass:
 
     def stdAtmos(altitude):
 
-            Ru  = obj.R / 1000 #universal gas constant (J/mol/K)
+            Ru  = obj.R / 1000 #universal gas constant (J/mol/K) # obj undefined... what is it?
             Ra  = obj.airR
 
             if ( 0 <= altitude) and (altitude < 11000):
@@ -159,7 +160,7 @@ class utilitiesClass:
                 Tb      = 216.65
                 Pb      = 22632.1
                 h1      = 11000
-                P       = Pb * exp(-obj.g0*obj.airM*(altitude - h1)/Ru/Tb)
+                P       = Pb * math.exp(-obj.g0*obj.airM*(altitude - h1)/Ru/Tb)
                 T       = Tb + Lb*(altitude - h1)
 
             elif ( 20000 <= altitude) and (altitude < 32000):
@@ -183,7 +184,7 @@ class utilitiesClass:
                 Tb      = 270.65
                 Pb      = 110.91
                 h4      = 47000
-                P       = Pb * exp(-obj.g0*obj.airM*(altitude - h4)/Ru/Tb)
+                P       = Pb * math.exp(-obj.g0*obj.airM*(altitude - h4)/Ru/Tb)
                 T       = Tb + Lb*(altitude - h4)
 
             elif(51000 <= altitude) and (altitude < 71000):
@@ -207,7 +208,7 @@ class utilitiesClass:
             
 
             rho         = P / (Ra * T)
-            a           = sqrt(1.4 * Ra * T)
+            a           = math.sqrt(1.4 * Ra * T)
             output.P    = P
             output.T    = T
             output.rho  = rho

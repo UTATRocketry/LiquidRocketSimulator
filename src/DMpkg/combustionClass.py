@@ -8,12 +8,13 @@ class combustionClass:
         self.util = rocket.utilitiesClass(self.input)
 
     def getPropellantTags(self):
-        self.fuelTag = self.input.get("fuel")
-        self.oxidizerTag = self.input.get("ox")
+        self.fuelTag = self.input["fuel"]
+        self.oxidizerTag = self.input["ox"]
 
     def get_CEA(self):
         
-        houbolt_jr                     = rocket.cea(Pcc=self.input["design"]["Pcc"], OF=self.input["design"]["OF"], area_ratio=rocket.nozzleClass.exp, Pamb=14.7, oxName= self.input["ox"]["name"], fuelName= self.input["fuel"]["name"]) #are these meant to be default values? where to get params from?
+        houbolt_jr                     = rocket.cea(Pcc=self.input["design"]["Pcc"], OF=self.input["design"]["OF"], area_ratio=rocket.nozzleClass.exp, Pamb=14.7, 
+                                                    oxName= self.input["ox"]["name"], fuelName= self.input["fuel"]["name"]) #are these meant to be default values? where to get params from?
         # area ratio is throat area / nozzle area (from nozzleClass)
 
         self.output.gamm_e             = houbolt_jr.exit_MolWt_gamma
@@ -25,10 +26,3 @@ class combustionClass:
         self.output.gamm               = houbolt_jr.Chamber_MolWt_gamma
         self.output.cstar              = houbolt_jr.Cstar
         self.output.Tcc                = houbolt_jr.temperatures[0]
-
-        
-
-
-
-
-

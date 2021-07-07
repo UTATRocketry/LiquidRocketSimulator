@@ -15,9 +15,9 @@ class simulationClass:
             self.rocket          = rocket.rocketClass(self.input)
             self.util            = rocket.utilitiesClass(self.input)
 
-            self.numpt           = self.input.sim.numpt
-            self.relax           = self.input.sim.relax
-            self.altConvCrit     = self.input.sim.altConvCrit
+            self.numpt           = self.input["sim"]["numpt"]
+            self.relax           = self.input["sim"]["relax"]
+            self.altConvCrit     = self.input["sim"]["altConvCrit"]
 
             self.flight          = rocket.propertyClass()
             self.flight.t        = self.util.zeroArray
@@ -32,8 +32,8 @@ class simulationClass:
             self.flight.theta    = self.util.zeroArray
             self.flight.Ma       = self.util.zeroArray
             self.flight.g        = self.util.zeroArray
-            self.flight.type     = self.input.settings.flightType
-            self.flight.altBO    = self.input.sim.altBO
+            self.flight.type     = self.input["settings"]["flightType"]
+            self.flight.altBO    = self.input["sim"]["altBO"]
 
             self.setFlightDynamicsType()
             

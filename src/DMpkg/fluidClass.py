@@ -3,6 +3,7 @@ import DMpkg as rocket
 
 class fluidClass:
     def __init__(self, input, inputTag) -> None:
+        # what's the difference between input and inputTag
 
         self.phase                  = 0   # 1 if pressurant, 2 else
         if inputTag["fluidtype"] == 'Pressurant':
@@ -43,6 +44,10 @@ class fluidClass:
 
     def initializeMass(self, initValue):
         self.m[0]                   = initValue
+
+    # do we need an initializeDensity function?
+    def initializeDensity(self, initValue):
+        self.rho[0]                 = initValue
     
     def initializeTemperature(self, initValue):
         self.T[0]                   = initValue
@@ -67,5 +72,3 @@ class fluidClass:
     
     def getN(self, i):
         return self.n[i]
-
-        

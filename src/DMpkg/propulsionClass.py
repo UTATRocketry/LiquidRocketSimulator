@@ -40,8 +40,8 @@ class propulsionClass:
         self.settings['numTanks']            = np.shape(self.propellants.tanks,1)
 
     def getPropellantTags(self):
-        self.oxidizerTag = self.input.get('ox')
-        self.fuelTag = self.input.get('fuel')
+        self.oxidizerTag = self.input['ox']
+        self.fuelTag = self.input['fuel']
 
     def getCG(self):
         self.propellants.getCG() #this method does not return anything, but adds cg, m, and l instance variables to self.propellants
@@ -118,11 +118,11 @@ class propulsionClass:
         for i in range(self.settings['numTanks']):
             if tank_inputs[i][0] == 'Fuel' or tank_inputs[i][0] == 'Oxidizer':
 
-                self.propellants.tanks[i].getBlowdown()
+                self.propellants.tanks[i].getBlowdown() # i'm assuming this works
 
                 if tank_inputs[i][2] > 0:
-                    #propellants.tanks contains a list of objects of type propellantTankClass
-                    self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot = self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot + self.propellants.tanks[tank_inputs[i][0]].pressurant.mdot
+                    # propellants.tanks contains a list of objects of type propellantTankClass
+                    self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot = self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot + self.propellants.tanks[tank_inputs[i][0]].pressurant.mdot # idk what's happening here with the tank inputs
 
             for i in range(self.settings['numTanks']):
 
@@ -130,7 +130,7 @@ class propulsionClass:
                     self.propellants.tanks[i][0].getBlowdown()
 
                     if tank_inputs[i][2] > 0:
-                        self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot = self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot + self.propellants.tanks[tank_inputs[i][0]].pressurant.mdot
+                        self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot = self.propellants.tanks[tank_inputs[i][2]].pressurant.mdot + self.propellants.tanks[tank_inputs[i][0]].pressurant.mdot # idk what's happening here with the tank inputs
             
             for i in range(self.settings['numTanks']):
                 if tank_inputs[i][0] == 'Pressurant':

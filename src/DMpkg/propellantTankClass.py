@@ -48,55 +48,57 @@ class propellantTankClass:
         # Populate general properties
         self.input           = houbolt_jr_single()                            # Input
         self.tank_input      = tankTag                          # Input field for this tank
-        self.name            = self.tank_input.get("name")                         # Propellant name
-        self.type            = self.tank_input.get("fluidtype")                     # Propellant type
-        self.m               = np.zeros((input.sim.numpt, 1))        # Mass
-        self.l               = self.tank_input.get("lTank")
-        self.cg              = np.zeros((input.sim.numpt, 1))        # CG
-        self.offset          = self.tank_input.get("offset")                        # Offset distance
+        self.name            = self.tank_input["name"]                         # Propellant name
+        self.type            = self.tank_input["fluidtype"]                     # Propellant type
+        self.m               = np.zeros((input["sim"]["numpt"], 1))        # Mass
+        self.l               = self.tank_input["lTank"]
+        self.cg              = np.zeros((input["sim"]["numpt"], 1))        # CG
+        self.offset          = self.tank_input["offset"]                      # Offset distance
             
         # Create utilities property
         self.util            = rocket.utilitiesClass(input)
 
         # Populate tank struct
         self.tank            = rocket.propertyClass()
-        self.tank.t          = self.tank_input.get("tTank")                         # Wall thickness
-        self.tank.m          = self.tank_input.get("mTank")                         # Mass
-        self.tank.v          = self.tank_input.get("vTank")                         # Volume
-        self.tank.cg         = self.tank_input.get("lTank")/2                       # CG location
+        self.tank.t          = self.tank_input["tTank"]                         # Wall thickness
+        self.tank.m          = self.tank_input["mTank"]                         # Mass
+        self.tank.v          = self.tank_input["vTank"]                         # Volume
+        self.tank.cg         = self.tank_input["lTank"]/2                       # CG location
             
         self.prop_name       = self.propName()
         self.prop_name_cp    = self.propName_cp()
         self.pres_name       = self.presName()
         self.pres_name_cp    = self.presName_cp()  
+
+        self.initStruct = self.input # is this what we need? what's the point of initStruct if the inputs are present in input
     
-        rho                 = self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp)
-        self.tank.ullage     = self.tank.v - self.tank_input.get("mInit") / rho
+        rho                 = self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp)
+        self.tank.ullage     = self.tank.v - self.tank_input["mInit"] / rho
 
         # Initialize propellant liquid phase
-        self.propellant      = rocket.twoPhaseFluidClass(input, tankTag)
+        self.propellant      = rocket.fluidClass(input, tankTag) # this needs to be 2 phase... how do we specify that
 
-        initStruct.T        = [self.tank_input.get("Tinit"), self.tank_input.get("Tinit")]
-        initStruct.P        = [self.tank_input.get("Pinit"), self.tank_input.get("Pinit")]
-        initStruct.m        = [self.tank_input.get("mInit"), 0]
-        initStruct.rho      = [self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp), \
-                                self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'Q', 1, self.prop_name_cp)]
+        self.initStruct.T        = [self.tank_input["Tinit"], self.tank_input["Tinit"]]
+        self.initStruct.P        = [self.tank_input["Pinit"], self.tank_input["Pinit"]]
+        self.initStruct.m        = [self.tank_input["mInit"], 0]
+        self.initStruct.rho      = [self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp), \
+                                self.util.cp('D', 'T', self.tank_input["Tinit"], 'Q', 1, self.prop_name_cp)]
             
-        self.propellant.setInitialConditions(initStruct)
+        self.propellant.setInitialConditions(self.initStruct)
 
         # Initialize pressurant vapor phase
-        exec("self.pressurant      = rocket.FluidClass(input, self.input.(" + self.tank_input.get("pressurant")+"))")    # come back to this when fluidclass inputs are done
+        exec("self.pressurant      = rocket.FluidClass(input, self.input.(" + self.tank_input["pressurant"]+"))")    # come back to this when fluidclass inputs are done
 
-        initStruct.T        = self.tank_input.get("Tinit")
-        initStruct.P        = self.tank_input.get("Pinit")
-        initStruct.m        = self.tank.ullage*self.util.cp('D', 'T', initStruct.T, 'P', initStruct.P, self.pres_name_cp)
-        initStruct.rho      = self.util.cp('D', 'T', self.tank_input.get("Tinit"), 'P', self.tank_input.get("Pinit"), self.prop_name_cp)
+        self.initStruct.T        = self.tank_input["Tinit"]
+        self.initStruct.P        = self.tank_input["Pinit"]
+        self.initStruct.m        = self.tank.ullage*self.util.cp('D', 'T', self.initStruct.T, 'P', self.initStruct.P, self.pres_name_cp)
+        self.initStruct.rho      = self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp)
             
-        self.pressurant.setInitialConditions(initStruct)
+        self.pressurant.setInitialConditions(self.initStruct) # where do we initialize self.pressurant
 
         # Flag tank if its pressurized
-        self.isPressurized   = self.tank_input.get("isPressurized")
-        self.pressurantOrder = self.tank_input.get("pressurantOrder")
+        self.isPressurized   = self.tank_input["isPressurized"]
+        self.pressurantOrder = self.tank_input["pressurantOrder"]
 
         # Select blowdown def
         self.setBlowdownCharacteristics()
@@ -116,17 +118,17 @@ class propellantTankClass:
     def getBlowdown(self):
 
         if self.type == 'Oxidizer':
-            if self.tank_input.get("blowdownMode") == 'unpressurized':
+            if self.tank_input["blowdownMode"] == 'unpressurized':
                 self.OX_Blowdown()
-            elif self.tank_input.get("blowdownMode") == 'constantPressure':
+            elif self.tank_input["blowdownMode"] == 'constantPressure':
                 self.OX_constantPressureBlowdown()
             else:
-                raise Exception('Blowdown mode #s has not been specialized'+ self.input.design.presMode)
+                raise Exception('Blowdown mode #s has not been specialized'+ self.input["design"]["presMode"])
         elif self.type == 'Fuel':
-            if self.tank_input.get("blowdownMode") == 'constantMdot':
+            if self.tank_input["blowdownMode"] == 'constantMdot':
                 self.FUEL_constantMdotBlowdown()
             else:
-                raise Exception('Blowdown mode #s has not been specialized'+ self.input.design.presMode)
+                raise Exception('Blowdown mode #s has not been specialized'+ self.input["design"]["presMode"])
         else:
             raise Exception('Propellant type #s unknown. Type can either be Oxidizer or Fuel'+ self.type)
             
@@ -169,35 +171,35 @@ class propellantTankClass:
     #-----------------------------------------------------------------------
     def OX_Blowdown(self):
         inp                  = rocket.propertyClass()
-        inp.mDot             = self.designVars.mDotox
-        inp.T                = self.tank_input.get("Tinit")
+        inp.mDot             = self.input["design"]["mDotox"]
+        inp.T                = self.tank_input["Tinit"]
         inp.V                = self.tank.v
         inp.mTank            = self.tank.m
         inp.P                = self.propellant.IC.P
         inp.n                = self.propellant.IC.n
-        inp.Cd               = self.designVars.injCd
-        inp.Pe               = self.designVars.Pcc * self.input.settings.cnv
-        inp.model            = self.input.settings.fluidModel
-        inp.nPres            = self.pressurant.m[0][0]/self.pressurant.MW
+        inp.Cd               = self.input["design"]["injCD"]
+        inp.Pe               = self.input["design"]["Pcc"] * self.input["settings"]["cnv"]
+        inp.model            = self.input["settings"]["fluidModel"]
+        inp.nPres            = self.pressurant.m[0][0] / self.pressurant.MW
             
-        self.tank.r          = self.designVars.diameter/2
+        self.tank.r          = self.input["design"]["diameter"] / 2
         Vhat_l              = self.propellant.MW / self.util.cp('D', 'T', inp.T[0], 'P', inp.P[0], 'N2O')
         inp                  = self.findAinj(inp, Vhat_l, self.propellant.MW, inp.P[0] - inp.Pe, inp.Cd)
 
         self.propellant.mdot[0][0]   = inp.mDot
             
-        dt                  = self.designVars.dt
+        dt                  = self.input["design"]["dt"]
 
-        for i in range(1,self.input.sim.numpt):
+        for i in range(1,self.input["sim"]["numpt"]):
 
             out             = self.propellant.bdChars(inp)
 
             self.propellant.n[i]      = self.propellant.n[i-1, :] + out.dn * dt
             self.propellant.T[i]      = self.propellant.T[i-1, 0] + out.dT * dt
-            self.propellant.mdot[i][0]   = out.mDot
+            self.propellant.mdot[i][0]   = out.mDot # what's this
             self.propellant.P[i]      = [out.P, out.P]
             self.propellant.rho[i][0]    = self.util.cp('D', 'T', self.propellant.T[i][1], 'P', self.propellant.P[i][0], 'N2O')
-            self.pressurant.n[i][0]      = inp.nPres
+            self.pressurant.n[i][0]      = inp.nPres # when is this initialized
 
             inp.T                        = self.propellant.T[i][0]
             inp.n                        = self.propellant.n[i]
@@ -207,7 +209,7 @@ class propellantTankClass:
         self.propellant.m        = self.propellant.n * self.propellant.MW
         self.pressurant.m        = self.pressurant.n * self.pressurant.MW
             
-        self.propellant.l[:, 0]  = np.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0] * (self.tank.r - self.tank.t)^2 * math.pi)) # this line doesn't work (what are we trying to do with np.divide)
+        self.propellant.l[:, 0]  = np.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0] * (self.tank.r - self.tank.t)**2 * math.pi))
         self.propellant.l[:, 1]  = self.l - self.propellant.l[0]
                 
         
@@ -223,23 +225,24 @@ class propellantTankClass:
     #-----------------------------------------------------------------------
     def OX_constantPressureBlowdown(self):
 
-        inp.mDot             = self.designVars.mDotox
-        inp.T                = self.tank_input.get("Tinit")
+        inp                  = rocket.propertyClass()
+        inp.mDot             = self.input["design"]["mDotox"]
+        inp.T                = self.tank_input["Tinit"]
         inp.V                = self.tank.v
         inp.mTank            = self.tank.m
         inp.P                = self.propellant.IC.P
         inp.n                = self.propellant.IC.n
-        inp.Cd               = self.designVars.injCd
-        inp.Pe               = self.designVars.Pcc * self.input.settings.cnv
-        inp.nPres            = self.pressurant.m[1][1]/self.pressurant.MW
-        inp.model            = self.input.settings.fluidModel
+        inp.Cd               = self.input["design"]["injCD"]
+        inp.Pe               = self.input["design"]["Pcc"] * self.input["settings"]["cnv"]
+        inp.model            = self.input["settings"]["fluidModel"]
+        inp.nPres            = self.pressurant.m[0][0] / self.pressurant.MW
             
-        self.tank.r          = self.designVars.diameter/2
+        self.tank.r          = self.input["design"]["diameter"]/2
         Vhat_l              = self.propellant.MW / self.util.cp('D', 'T', inp.T[0], 'P', inp.P[0], 'N2O')
         inp                  = self.findAinj(inp, Vhat_l, self.propellant.MW, inp.P[0], inp.Pe, inp.Cd)
 
         self.propellant.mdot[0][0]   = inp.mDot
-        dt                  = self.designVars.dt
+        dt                  = self.input["design"].dt
 
         for i in range(1,self.input.sim.numpt):
 
@@ -255,11 +258,11 @@ class propellantTankClass:
 
             self.propellant.n[i]      = self.propellant.n[i-1] + out.dn * dt
             self.propellant.T[i]      = self.propellant.T[i-1][0] + out.dT * dt
-            self.propellant.mdot[i][0]   = out.mDot
+            self.propellant.mdot[i][0]   = out.mDot # what's this
             self.propellant.P[i]      = [out.P, out.P]
             self.propellant.rho[i][0]    = self.util.cp('D', 'T', self.propellant.T[i][0], 'P', self.propellant.P[i][0], 'N2O')
 
-            self.pressurant.n[i][0]      = inp.nPres
+            self.pressurant.n[i][0]      = inp.nPres # when is this initialized
 
             inp.T                        = self.propellant.T[i][0]
             inp.n                        = self.propellant.n[i]
@@ -269,7 +272,7 @@ class propellantTankClass:
         self.propellant.m        = self.propellant.n * self.propellant.MW
         self.pressurant.m        = self.pressurant.n * self.pressurant.MW
             
-        self.propellant.l[0]  = np.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0]) * (self.tank.r - self.tank.t)^2 * pi)
+        self.propellant.l[0]  = np.divide(self.propellant.m[:, 0] , (self.propellant.rho[:, 0]) * (self.tank.r - self.tank.t) ** 2 * math.pi)
         self.propellant.l[1]  = self.l - self.propellant.l[1]
         self.pressurant.l        = self.propellant.l[:, 1]
  
@@ -280,16 +283,16 @@ class propellantTankClass:
 
     def FUEL_constantMdotBlowdown(self):
 
-        mdot    = self.designVars.mDotox / self.designVars.OF
-        T       = self.tank_input.get("Tinit")
+        mdot    = self.input["design"]["mDotox"] / self.input["design"]["OF"]
+        T       = self.tank_input["Tinit"]
 
         self.propellant.mdot[0][0] = mdot
-        dt                  = self.designVars.dt
+        dt                  = self.input["design"]["dt"]
 
-        for i in range(1, self.input.sim.numpt):
+        for i in range(1, self.input["sim"]["numpt"]):
 
             out = self.bdChars_LIQUIDS_MDOT(mdot)
-            self.propellant.m[i][0]      = self.propellant.m(i-1, 1) + out.mDot * dt
+            self.propellant.m[i][0]      = self.propellant.m(i-1, 1) + out.mDot * dt # what's out?
             self.propellant.mdot[i][0]   = mdot
             self.propellant.T[i][0]      = T
                 
@@ -309,64 +312,64 @@ class propellantTankClass:
         u = self.util
 
         # Input: T, nPres, nVap, nLiq, V, mTank, Cd, Ainj, Pe
-        if strcmp(input.model, 'empirical'):
+        if input.model ==  'empirical': # where does input.model come from?
 
-            # Molar specific vol. of liq. N2O [m^3/kmol]
-            Vhat_l      = u.noxProp.Coefs.Q2                    ^ \
-                            (1 + (1 - input.T/u.noxProp.Coefs.Q3)  ^ \
+            # Molar specific vol. of liq. N2O [m**3/kmol]
+            Vhat_l      = u.noxProp.Coefs.Q2                    ** \
+                            (1 + (1 - input.T/u.noxProp.Coefs.Q3)  ** \
                             u.noxProp.Coefs.Q4)                   / \
                             u.noxProp.Coefs.Q1
 
             # Molar c_V of He [J/(kmol*K)]
             CVhat_Pres  = u.nitrogen.Coefs.C1                   + \
                             u.nitrogen.Coefs.C2*input.T           + \
-                            u.nitrogen.Coefs.C3*input.T^2         + \
-                            u.nitrogen.Coefs.C4*input.T^3         + \
-                            u.nitrogen.Coefs.C5*input.T^4         - u.R
+                            u.nitrogen.Coefs.C3*input.T**2         + \
+                            u.nitrogen.Coefs.C4*input.T**3         + \
+                            u.nitrogen.Coefs.C5*input.T**4         - u.R
 
             a           = u.noxProp.Coefs.D3/input.T
             b           = u.noxProp.Coefs.D5/input.T
 
             # Molar c_V of N2O gas [J/(kmol*K)]
             CVhat_g     = u.noxProp.Coefs.D1                    + \
-                            u.noxProp.Coefs.D2*(a/sinh(a))^2      + \
-                            u.noxProp.Coefs.D4*(b/cosh(b))^2      - u.R
+                            u.noxProp.Coefs.D2*(a/math.sinh(a))**2      + \
+                            u.noxProp.Coefs.D4*(b/math.cosh(b))**2      - u.R
 
             # Molar c_V of N2O liq approx. = c_P [J/(kmol*K)]
             CVhat_l     = u.noxProp.Coefs.E1                    + \
                             u.noxProp.Coefs.E2*input.T            + \
-                            u.noxProp.Coefs.E3*input.T^2          + \
-                            u.noxProp.Coefs.E4*input.T^3          + \
-                            u.noxProp.Coefs.E5*input.T^4
+                            u.noxProp.Coefs.E3*input.T**2          + \
+                            u.noxProp.Coefs.E4*input.T**3          + \
+                            u.noxProp.Coefs.E5*input.T**4
 
             # Reduced temperature.
             Tr          = input.T/u.noxProp.Tc
 
             # Heat of vaporization of N2O [J/kmol]
-            delta_Hv    = u.noxProp.Coefs.T1*(1 - Tr)           ^ \
+            delta_Hv    = u.noxProp.Coefs.T1*(1 - Tr)           ** \
                             (u.noxProp.Coefs.T2                    + \
                             u.noxProp.Coefs.T3*Tr                 + \
-                            u.noxProp.Coefs.T4*Tr^2)
+                            u.noxProp.Coefs.T4*Tr**2)
 
             # Vapour P of N20 (Pa).
-            P_sat       = exp(u.noxProp.Coefs.V1                + \
+            P_sat       = math.exp(u.noxProp.Coefs.V1                + \
                             u.noxProp.Coefs.V2/input.T            + \
-                            u.noxProp.Coefs.V3*log(input.T)       + \
-                            u.noxProp.Coefs.V4*input.T^u.noxProp.Coefs.V5)
+                            u.noxProp.Coefs.V3*math.log(input.T)       + \
+                            u.noxProp.Coefs.V4*input.T**u.noxProp.Coefs.V5)
 
             # Derivative of vapour P with respect to T.
-            dP_sat      = (-u.noxProp.Coefs.V2/(input.T^2)      + \
+            dP_sat      = (-u.noxProp.Coefs.V2/(input.T**2)      + \
                             u.noxProp.Coefs.V3/input.T            + \
                             u.noxProp.Coefs.V4*u.noxProp.Coefs.V5 * \
-                            input.T^(u.noxProp.Coefs.V5-1))       * \
-                            exp(u.noxProp.Coefs.V1                + \
+                            input.T**(u.noxProp.Coefs.V5-1))       * \
+                            math.exp(u.noxProp.Coefs.V1                + \
                             u.noxProp.Coefs.V2/input.T            + \
-                            u.noxProp.Coefs.V3*log(input.T)       + \
-                            u.noxProp.Coefs.V4*input.T^u.noxProp.Coefs.V5)
+                            u.noxProp.Coefs.V3*math.log(input.T)       + \
+                            u.noxProp.Coefs.V4*input.T**u.noxProp.Coefs.V5)
 
         elif strcmp(input.model, 'coolprop'):
-            # Molar specific vol. of liq. N2O [m^3/kmol]
-            Vhat_l      = self.propellant.MW / u.cp('D', 'T', input.T[0], 'P', input.P[0], 'N2O')
+            # Molar specific vol. of liq. N2O [m**3/kmol]
+            Vhat_l      = self.propellant.MW / u.cp('D', 'T', input.T[0], 'P', input.P[0], 'N2O') # i don't think this section works with the input.T stuff
 
             # Molar c_V of Pressurant gas [J/(kmol*K)]
             CVhat_Pres  = self.pressurant.MW * u.cp('O', 'T', input.T[0], 'P', input.P[0], self.pressurant.name)
@@ -403,10 +406,10 @@ class propellantTankClass:
         if (input.Pe/P <= 0.5439):
             k       = 1.3
             g       = -0.5*(k+1)/(k-1)
-            f       = -input.Cd*input.Ainj * P * sqrt(k/(input.T*self.propellant.R)) * (0.5*(k+1))^g
+            f       = -input.Cd*input.Ainj * P * math.sqrt(k/(input.T*self.propellant.R)) * (0.5*(k+1))**g
         else:
             #disp('propellantTankClass > bdChars_NIROUSOXIDE(): WARNING, Fluid is not choked.')
-            f       = -input.Cd*input.Ainj*sqrt(abs(2/self.propellant.MW*(P - input.Pe)/Vhat_l))
+            f       = -input.Cd*input.Ainj*math.sqrt(abs(2/self.propellant.MW*(P - input.Pe)/Vhat_l))
             
             
         j           = -Vhat_l*P_sat
@@ -433,23 +436,23 @@ class propellantTankClass:
         if (Pcc/P <= 0.5439):
             k           = 1.3
             g           = -0.5*(k+1)/(k-1)
-            input.Ainj  = input.mDot / (Cd * P * sqrt(k/(input.T*self.propellant.R)) * (0.5*(k+1))^g)
+            input.Ainj  = input.mDot / (Cd * P * math.sqrt(k/(input.T*self.propellant.R)) * (0.5*(k+1))**g)
         else:
             print('WARNING, Fluid is not choked.')
-            input.Ainj  = (input.mDot/MW/Cd)*sqrt(0.5*Vh*MW/(P - Pcc))
+            input.Ainj  = (input.mDot/MW/Cd)*math.sqrt(0.5*Vh*MW/(P - Pcc))
             
             
         out         = self.propellant.bdChars(input)
 
-        if out.mDot > self.designVars.mDotox:
+        if out.mDot > self.input["design"]["mDotox"]:
 
-            while out.mDot > self.designVars.mDotox:
+            while out.mDot > self.input["design"]["mDotox"]:
                 input.Ainj  = input.Ainj - 0.000001
                 out         = self.propellant.bdChars(input)
                 
 
-        elif out.mDot < self.designVars.mDotox:
-            while out.mDot < self.designVars.mDotox:
+        elif out.mDot < self.input["design"]["mDotox"]:
+            while out.mDot < self.input["design"]["mDotox"]:
                 input.Ainj  = input.Ainj + 0.000001
                 out         = self.propellant.bdChars(input)
                 
@@ -460,13 +463,13 @@ class propellantTankClass:
         return input
 
     def propName(self):
-        name = self.tank_input.get("name")
+        name = self.tank_input["name"]
         return name
         
     def propName_cp(self):
-        name = self.tank_input.get("name")
+        name = self.tank_input["name"]
             
-        for i in range(0,size(self.util.coolprop_alias, 1)-1):
+        for i in range(0,np.size(self.util.coolprop_alias, 1)-1):
             if (name== self.util.coolprop_alias[i, 0]):
                 name = self.util.coolprop_alias[i, 0]
         return name
@@ -474,13 +477,13 @@ class propellantTankClass:
         
         
     def presName(self):
-        exec("name = self.input.(" + self.tank_input.get("pressurant") + ").name")
-        return name
+        exec("name = self.input.(" + self.tank_input["pressurant") + ").name")
+        return name # what ius name
 
     def presName_cp(self):
-        exec("name = self.input.("+self.tank_input.get("pressurant")+").name")
+        exec("name = self.input.("+self.tank_input["pressurant")+").name")
             
-        for i in range(0,size(self.util.coolprop_alias, 1)-1):
+        for i in range(0,np.size(self.util.coolprop_alias, 1)-1):
             if (name == self.util.coolprop_alias[i, 0]):
                 name = self.util.coolprop_alias[i, 1]
 

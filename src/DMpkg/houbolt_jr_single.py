@@ -47,29 +47,9 @@ def houbolt_jr_single(inp_path):
     inp_dic["props"][1][2] = 1
     inp_dic["props"][2][0] = 'Pressurant'
     inp_dic["props"][2][1] = inp_dic["oxPres"]
-    inp_dic["props"][2][2] = 
+    inp_dic["props"][2][2] = 2
     inp_dic["props"][3][0] = 'Oxidizer'
     inp_dic["props"][3][1] = inp_dic["ox"]
     inp_dic["props"][3][2] = 3   
-
-    """
-    look into what to do with:
-    input.fPres.Pinit
-    input.fPres.mInit 
-    input.fuel.lTank (read from mass budget)
-    input.fuel.Pinit
-    input.fuel.vTank
-    input.fuel.lTank
-    input.oxPres.Pinit
-    input.oxPres.mInit
-    input.ox.Pinit
-    input.ox.vTank
-    input.ox.lTank
-    all of props
-
-    completed except:
-    input.fuel.lTank
-    and input.mass.data
-    """
 
     return inp_dic
