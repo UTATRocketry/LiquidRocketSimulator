@@ -367,7 +367,7 @@ class propellantTankClass:
                             u.noxProp.Coefs.V3*math.log(input.T)       + \
                             u.noxProp.Coefs.V4*input.T**u.noxProp.Coefs.V5)
 
-        elif strcmp(input.model, 'coolprop'):
+        elif input.model == 'coolprop':
             # Molar specific vol. of liq. N2O [m**3/kmol]
             Vhat_l      = self.propellant.MW / u.cp('D', 'T', input.T[0], 'P', input.P[0], 'N2O') # i don't think this section works with the input.T stuff
 
@@ -477,11 +477,11 @@ class propellantTankClass:
         
         
     def presName(self):
-        exec("name = self.input.(" + self.tank_input["pressurant") + ").name")
+        name = self.tank_input["pressurant"]['name']
         return name # what ius name
 
     def presName_cp(self):
-        exec("name = self.input.("+self.tank_input["pressurant")+").name")
+        name = self.tank_input["pressurant"]['name']
             
         for i in range(0,np.size(self.util.coolprop_alias, 1)-1):
             if (name == self.util.coolprop_alias[i, 0]):

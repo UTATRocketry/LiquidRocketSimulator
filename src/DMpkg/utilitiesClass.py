@@ -133,7 +133,7 @@ class utilitiesClass:
             
         self.coolprop_alias = cellss(1, 2)
         self.coolprop_alias[1][1] = 'C2H5OH'
-        self.coolprop_alias[1] [2] = 'Ethanol'
+        self.coolprop_alias[1][2] = 'Ethanol'
 
 
     def coolprop(needed, p1, p1val, p2, p2val, name):
@@ -142,17 +142,17 @@ class utilitiesClass:
        output = coolprop.PropsSI(needed, p1, p1val, p2, p2val, name)
        return output
 
-    def stdAtmos(altitude):
+    def stdAtmos(self, altitude):
 
-            Ru  = obj.R / 1000 #universal gas constant (J/mol/K) # obj undefined... what is it?
-            Ra  = obj.airR
+            Ru  = self.R / 1000 #universal gas constant (J/mol/K) # self undefined... what is it?
+            Ra  = self.airR
 
             if ( 0 <= altitude) and (altitude < 11000):
                 Lb      = -0.0065 #Lapse rate (K/m)
                 Tb      = 288.15 #Standard temperature (K)
                 Pb      = 101325 #Static pressure (Pa)
                 h0      = 0
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ** (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ** (self.g0*self.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h0)
 
             elif ( 11000 <= altitude) and (altitude < 20000):
@@ -160,7 +160,7 @@ class utilitiesClass:
                 Tb      = 216.65
                 Pb      = 22632.1
                 h1      = 11000
-                P       = Pb * math.exp(-obj.g0*obj.airM*(altitude - h1)/Ru/Tb)
+                P       = Pb * math.exp(-self.g0*self.airM*(altitude - h1)/Ru/Tb)
                 T       = Tb + Lb*(altitude - h1)
 
             elif ( 20000 <= altitude) and (altitude < 32000):
@@ -168,7 +168,7 @@ class utilitiesClass:
                 Tb      = 216.65
                 Pb      = 5474.89
                 h2      = 20000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ** (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ** (self.g0*self.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h2)
 
             elif (32000 <= altitude) and (altitude < 47000):
@@ -176,7 +176,7 @@ class utilitiesClass:
                 Tb      = 228.65
                 Pb      = 868.02
                 h3      = 32000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ** (g*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ** (g*self.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h3)
 
             elif(47000 <= altitude) and (altitude < 51000):
@@ -184,7 +184,7 @@ class utilitiesClass:
                 Tb      = 270.65
                 Pb      = 110.91
                 h4      = 47000
-                P       = Pb * math.exp(-obj.g0*obj.airM*(altitude - h4)/Ru/Tb)
+                P       = Pb * math.exp(-self.g0*self.airM*(altitude - h4)/Ru/Tb)
                 T       = Tb + Lb*(altitude - h4)
 
             elif(51000 <= altitude) and (altitude < 71000):
@@ -192,7 +192,7 @@ class utilitiesClass:
                 Tb      = 270.65
                 Pb      = 66.94
                 h5      = 51000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ** (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ** (self.g0*self.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h5)
 
             elif(71000 <= altitude) and (altitude < 86000):
@@ -200,7 +200,7 @@ class utilitiesClass:
                 Tb      = 214.65
                 Pb      = 3.96
                 h6      = 71000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ** (obj.g0*obj.airM/Ru/Lb)
+                P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ** (self.g0*self.airM/Ru/Lb)
                 T       = Tb + Lb*(altitude - h6)
 
             else:
