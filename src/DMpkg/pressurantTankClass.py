@@ -24,7 +24,7 @@ class pressurantTankClass:
             self.input                              = input
             self.tank_input                         = inputTag
 
-            # what's the difference between input and inputTag here?]
+            # what's the difference between input and inputTag here?
 
         except ValueError or KeyError or input == None or inputTag == None:
             raise Exception("Invalid inputs - pressurantTankClass > __init__")
@@ -90,17 +90,17 @@ class pressurantTankClass:
 
     def PRES_blowdown(self):
 
-        self.in.V                           = self.tank.V
-        self.in.qdot                        = self.tank_input["qdot"]
-        self.in.gas                         = self.name
+        self.input.V                           = self.tank.V
+        self.input.qdot                        = self.tank_input["qdot"]
+        self.input.gas                         = self.name
 
         dt                                  = self.designVars["dt"]
 
         for i in range(2, self.input['sim']['numpt']):
-            self.in.p                       = self.pressurant.P[i - 1]
-            self.in.T                       = self.pressurant.T[i - 1]
-            self.in.mdot                    = self.pressurant.mdot[i - 1]
-            self.in.m                       = self.pressurant.m[i - 1]
+            self.input.p                       = self.pressurant.P[i - 1]
+            self.input.T                       = self.pressurant.T[i - 1]
+            self.input.mdot                    = self.pressurant.mdot[i - 1]
+            self.input.m                       = self.pressurant.m[i - 1]
                     
             bdChars                         = self.pressurant.bdChars
 

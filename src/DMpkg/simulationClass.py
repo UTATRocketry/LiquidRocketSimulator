@@ -5,7 +5,7 @@ class simulationClass:
 
     def __init__(self, input_selector):
         if input_selector == None:
-            print('ERROR: simulationClass constructor executed without input arguments')
+            raise Exception('ERROR: simulationClass constructor executed without input arguments')
         else:
 
             print('Message: Building simulationClass')

@@ -1,3 +1,4 @@
+from DMpkg.propertyClass import propertyClass
 from src.DMpkg.houbolt_jr_single import houbolt_jr_single
 import DMpkg as rocket
 import numpy as np
@@ -12,11 +13,11 @@ class combustionClass:
         self.oxidizerTag = self.input["ox"]
 
     def get_CEA(self):
-        
+        #This method does not output anything
         houbolt_jr                     = rocket.cea(Pcc=self.input["design"]["Pcc"], OF=self.input["design"]["OF"], area_ratio=rocket.nozzleClass().exp, Pamb=14.7, 
                                                     oxName= self.input["ox"]["name"], fuelName= self.input["fuel"]["name"]) #are these meant to be default values? where to get params from?
         # area ratio is throat area / nozzle area (from nozzleClass)
-
+        self.output = propertyClass()
         self.output.gamm_e             = houbolt_jr.exit_MolWt_gamma
         self.output.rho_e              = houbolt_jr.MachNumber
         self.output.Isp                = houbolt_jr.Isp

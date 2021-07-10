@@ -12,7 +12,7 @@ class propulsionClass:
         self.util = utilitiesClass(self.input)
         
         self.info = self.input["engine"]
-        #self.info is a dictionary (see input.json for properties)
+        #self.info is a dictionary (see input.yaml for properties)
 
         self.settings = self.input['settings']
         ofi = self.settings['OF_i']

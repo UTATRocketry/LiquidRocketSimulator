@@ -142,78 +142,79 @@ class utilitiesClass:
        output = coolprop.PropsSI(needed, p1, p1val, p2, p2val, name)
        return output
 
-    def stdAtmos(self, altitude):
+    def stdAtmos(self, altitude) -> dict:
 
-            Ru  = self.R / 1000 #universal gas constant (J/mol/K) # self undefined... what is it?
-            Ra  = self.airR
+        Ru  = self.R / 1000 #universal gas constant (J/mol/K) # self undefined... what is it?
+        Ra  = self.airR
 
-            if ( 0 <= altitude) and (altitude < 11000):
-                Lb      = -0.0065 #Lapse rate (K/m)
-                Tb      = 288.15 #Standard temperature (K)
-                Pb      = 101325 #Static pressure (Pa)
-                h0      = 0
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ** (self.g0*self.airM/Ru/Lb)
-                T       = Tb + Lb*(altitude - h0)
+        if ( 0 <= altitude) and (altitude < 11000):
+            Lb      = -0.0065 #Lapse rate (K/m)
+            Tb      = 288.15 #Standard temperature (K)
+            Pb      = 101325 #Static pressure (Pa)
+            h0      = 0
+            P       = Pb * (Tb/(Tb + Lb*(altitude - h0))) ** (self.g0*self.airM/Ru/Lb)
+            T       = Tb + Lb*(altitude - h0)
 
-            elif ( 11000 <= altitude) and (altitude < 20000):
-                Lb      = 0
-                Tb      = 216.65
-                Pb      = 22632.1
-                h1      = 11000
-                P       = Pb * math.exp(-self.g0*self.airM*(altitude - h1)/Ru/Tb)
-                T       = Tb + Lb*(altitude - h1)
+        elif ( 11000 <= altitude) and (altitude < 20000):
+            Lb      = 0
+            Tb      = 216.65
+            Pb      = 22632.1
+            h1      = 11000
+            P       = Pb * math.exp(-self.g0*self.airM*(altitude - h1)/Ru/Tb)
+            T       = Tb + Lb*(altitude - h1)
 
-            elif ( 20000 <= altitude) and (altitude < 32000):
-                Lb      = 0.001
-                Tb      = 216.65
-                Pb      = 5474.89
-                h2      = 20000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ** (self.g0*self.airM/Ru/Lb)
-                T       = Tb + Lb*(altitude - h2)
+        elif ( 20000 <= altitude) and (altitude < 32000):
+            Lb      = 0.001
+            Tb      = 216.65
+            Pb      = 5474.89
+            h2      = 20000
+            P       = Pb * (Tb/(Tb + Lb*(altitude - h2))) ** (self.g0*self.airM/Ru/Lb)
+            T       = Tb + Lb*(altitude - h2)
 
-            elif (32000 <= altitude) and (altitude < 47000):
-                Lb      = 0.0028
-                Tb      = 228.65
-                Pb      = 868.02
-                h3      = 32000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ** (g*self.airM/Ru/Lb)
-                T       = Tb + Lb*(altitude - h3)
+        elif (32000 <= altitude) and (altitude < 47000):
+            Lb      = 0.0028
+            Tb      = 228.65
+            Pb      = 868.02
+            h3      = 32000
+            P       = Pb * (Tb/(Tb + Lb*(altitude - h3))) ** (g*self.airM/Ru/Lb)
+            T       = Tb + Lb*(altitude - h3)
 
-            elif(47000 <= altitude) and (altitude < 51000):
-                Lb      = 0
-                Tb      = 270.65
-                Pb      = 110.91
-                h4      = 47000
-                P       = Pb * math.exp(-self.g0*self.airM*(altitude - h4)/Ru/Tb)
-                T       = Tb + Lb*(altitude - h4)
+        elif(47000 <= altitude) and (altitude < 51000):
+            Lb      = 0
+            Tb      = 270.65
+            Pb      = 110.91
+            h4      = 47000
+            P       = Pb * math.exp(-self.g0*self.airM*(altitude - h4)/Ru/Tb)
+            T       = Tb + Lb*(altitude - h4)
 
-            elif(51000 <= altitude) and (altitude < 71000):
-                Lb      = -0.0028
-                Tb      = 270.65
-                Pb      = 66.94
-                h5      = 51000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ** (self.g0*self.airM/Ru/Lb)
-                T       = Tb + Lb*(altitude - h5)
+        elif(51000 <= altitude) and (altitude < 71000):
+            Lb      = -0.0028
+            Tb      = 270.65
+            Pb      = 66.94
+            h5      = 51000
+            P       = Pb * (Tb/(Tb + Lb*(altitude - h5))) ** (self.g0*self.airM/Ru/Lb)
+            T       = Tb + Lb*(altitude - h5)
 
-            elif(71000 <= altitude) and (altitude < 86000):
-                Lb      = -0.002
-                Tb      = 214.65
-                Pb      = 3.96
-                h6      = 71000
-                P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ** (self.g0*self.airM/Ru/Lb)
-                T       = Tb + Lb*(altitude - h6)
+        elif(71000 <= altitude) and (altitude < 86000):
+            Lb      = -0.002
+            Tb      = 214.65
+            Pb      = 3.96
+            h6      = 71000
+            P       = Pb * (Tb/(Tb + Lb*(altitude - h6))) ** (self.g0*self.airM/Ru/Lb)
+            T       = Tb + Lb*(altitude - h6)
 
-            else:
-                P       = 0
-            
+        else:
+            P       = 0
+        
 
-            rho         = P / (Ra * T)
-            a           = math.sqrt(1.4 * Ra * T)
-            output.P    = P
-            output.T    = T
-            output.rho  = rho
-            output.a    = a
-            return output
+        rho         = P / (Ra * T)
+        a           = math.sqrt(1.4 * Ra * T)
+        output      = {} #this was not here before; output was not defined
+        output['P']    = P
+        output['T']    = T
+        output['rho']  = rho
+        output['a']    = a
+        return output
 
 def cellss(x,y):
     output = []
