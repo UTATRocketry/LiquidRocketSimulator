@@ -1,5 +1,6 @@
 import DMpkg as rocket
 import numpy as np
+import os
 
 class rocketClass:
     
@@ -9,13 +10,14 @@ class rocketClass:
         
         else:
             self.input                  = input
-            #self.propulsion             = propulsionClass(input)
+            self.propulsion             = rocket.propulsionClass(input)
             self.airframe               = rocket.propertyClass()
             self.utilities              = rocket.utilitiesClass(input)
 
-            self.airframe.drag_file     = 'src\DMpkg\Drag_Data_Houbolt_Jr.csv'
+            self.airframe.drag_file     = "DMpkg/Drag_Data_Houbolt_Jr.csv"
             self.drag_model()
             
     def drag_model(self):
         drag_data = np.genfromtxt(self.airframe.drag_file, delimiter = ',')
+
         self.airframe.cd = np.polynomial.Polynomial.fit(drag_data[:,0], drag_data[:,1], deg=3)

@@ -57,7 +57,7 @@ fPres:
 fuel:
   isPropellant: true                                            # Propellant flag                                   [bool]
   fluidtype: Fuel                                               # Propellant type                                   [char]
-  name: C2H50H                                                  # Propellant name                                   [char]
+  name: C2H5OH                                                  # Propellant name                                   [char]
   isPressurized: true                                           # Pressurization flag                               [bool]
   pressurantOrder: fwd                                          # Pressurant order                                  [str]
   pressurant: fPres                                             # Input struct name                                 [str]

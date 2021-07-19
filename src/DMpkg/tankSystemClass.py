@@ -6,26 +6,24 @@ from DMpkg.propellantTankClass import propellantTankClass
 from DMpkg.utilitiesClass import cellss
 class tankSystemClass:
     
-    def tankSystemClass(self, input):
+    def __init__(self, input):
         self.input = input
         self.designVars = input["design"]
-        self.tanks = cellss(len(input.props,1),1) # can't change to numpy array as elmts of array are propellant tank class objects (line 19)
+        self.tanks = cellss(np.shape(input['props'])[0],1) # can't change to numpy array as elmts of array are propellant tank class objects (line 19)
         self.tank_inputs = input["props"]
         self.create_tanks()
         # other properties m,cg,l should not need to be initialized as they are arrays
-        return self
 
     def create_tanks(self):
 
         for i in range(0,len(self.tank_inputs)):
             type = self.tank_inputs[i][0]
             if (type== 'Fuel') or (type == 'Oxidizer'):
-                self.tanks[i][0]      = propellantTankClass(self.input, self.input.props[i][1])
+                self.tanks[i][0]      = rocket.propellantTankClass(self.input, self.input['props'][i][1])
             elif (type== 'Pressurant'):
-                self.tanks[i][0]      = pressurantTankClass(self.input, self.input.props[i][1])
+                self.tanks[i][0]      = rocket.pressurantTankClass(self.input, self.input['props'][i][1])
             else:
                 raise Exception('Incorrect tank type.')
-        return self
                 
             
         

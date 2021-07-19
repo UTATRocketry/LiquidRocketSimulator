@@ -6,7 +6,7 @@ from DMpkg.utilitiesClass import cellss
 def houbolt_jr_single(inp_path):
 
     with open(inp_path, "r") as f:
-        inp_dic = yaml.load(f)
+        inp_dic = yaml.full_load(f)
 
     # engine_dic = inp_dic.get("engine")
     # settings_dic = inp_dic.get("settings")
@@ -28,14 +28,14 @@ def houbolt_jr_single(inp_path):
     inp_dic["fPres"]["mInit"] = inp_dic["fPres"]["vTank"] * inp_dic["fPres"]["Rhoinit"]
 
     inp_dic["fuel"]["Pinit"] = inp_dic["fuel"]["Pinit"] * inp_dic["settings"]["cnv"]
-    inp_dic["fuel"]["vTank"] = inp_dic["fuel"]["mInit"] * (1 + inp_dic["fuel"]["ullage"]] / inp_dic["fuel"]["Rhoinit"] # converting from psi to Pa
+    inp_dic["fuel"]["vTank"] = inp_dic["fuel"]["mInit"] * (1 + inp_dic["fuel"]["ullage"]) / inp_dic["fuel"]["Rhoinit"] # converting from psi to Pa
     inp_dic["fuel"]["lTank"] = inp_dic["fuel"]["vTank"] / (math.pi*(0.5*inp_dic["design"]["diameter"] - inp_dic["fuel"]["tTank"]) ** 2)
 
     inp_dic["oxPres"]["Pinit"] = inp_dic["oxPres"]["Pinit"] * inp_dic["settings"]["cnv"] # converting from psi to Pa
     inp_dic["oxPres"]["mInit"] = inp_dic["oxPres"]["vTank"] * inp_dic["oxPres"]["Rhoinit"]
 
     inp_dic["ox"]["Pinit"] = inp_dic["ox"]["Pinit"] * inp_dic["settings"]["cnv"] # converting from psi to Pa
-    inp_dic["ox"]["vTank"] = inp_dic["ox"]["mInit"] * (1 + inp_dic["ox"]["ullage"]] / inp_dic["ox"]["Rhoinit"]
+    inp_dic["ox"]["vTank"] = inp_dic["ox"]["mInit"] * (1 + inp_dic["ox"]["ullage"]) / inp_dic["ox"]["Rhoinit"]
     inp_dic["ox"]["lTank"] = inp_dic["ox"]["vTank"] / (math.pi*(0.5*inp_dic["design"]["diameter"] - inp_dic["ox"]["tTank"]) ** 2)
 
     inp_dic["props"] = cellss(4, 3) # cannot change to numpy array because of multiple data types

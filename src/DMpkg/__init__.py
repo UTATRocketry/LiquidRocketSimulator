@@ -1,6 +1,7 @@
 #__init__.py
 from .simulationClass import *
 from .propertyClass import *
+from .propulsionClass import *
 from .utilitiesClass import *
 from .rocketClass import *
 from .houbolt_jr_single import *

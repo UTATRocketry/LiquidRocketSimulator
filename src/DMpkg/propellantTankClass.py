@@ -1,4 +1,4 @@
-from src.DMpkg.houbolt_jr_single import houbolt_jr_single
+from DMpkg.houbolt_jr_single import houbolt_jr_single
 import DMpkg as rocket
 import numpy as np
 import math
@@ -46,7 +46,7 @@ class propellantTankClass:
     def __init__(self,input, tankTag):
             
         # Populate general properties
-        self.input           = houbolt_jr_single()                            # Input
+        self.input           = input                            # Input
         self.tank_input      = tankTag                          # Input field for this tank
         self.name            = self.tank_input["name"]                         # Propellant name
         self.type            = self.tank_input["fluidtype"]                     # Propellant type
@@ -69,8 +69,6 @@ class propellantTankClass:
         self.prop_name_cp    = self.propName_cp()
         self.pres_name       = self.presName()
         self.pres_name_cp    = self.presName_cp()  
-
-        self.initStruct = self.input # is this what we need? what's the point of initStruct if the inputs are present in input
     
         rho                 = self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp)
         self.tank.ullage     = self.tank.v - self.tank_input["mInit"] / rho
@@ -78,6 +76,7 @@ class propellantTankClass:
         # Initialize propellant liquid phase
         self.propellant      = rocket.fluidClass(input, tankTag) # this needs to be 2 phase... how do we specify that
 
+        self.initStruct     = rocket.propertyClass()
         self.initStruct.T        = [self.tank_input["Tinit"], self.tank_input["Tinit"]]
         self.initStruct.P        = [self.tank_input["Pinit"], self.tank_input["Pinit"]]
         self.initStruct.m        = [self.tank_input["mInit"], 0]
@@ -87,13 +86,13 @@ class propellantTankClass:
         self.propellant.setInitialConditions(self.initStruct)
 
         # Initialize pressurant vapor phase
-        exec("self.pressurant      = rocket.FluidClass(input, self.input.(" + self.tank_input["pressurant"]+"))")    # come back to this when fluidclass inputs are done
+        exec("self.pressurant      = rocket.fluidClass(input, self.input['" + self.tank_input["pressurant"]+"'])")    # come back to this when fluidclass inputs are done
 
         self.initStruct.T        = self.tank_input["Tinit"]
         self.initStruct.P        = self.tank_input["Pinit"]
         self.initStruct.m        = self.tank.ullage*self.util.cp('D', 'T', self.initStruct.T, 'P', self.initStruct.P, self.pres_name_cp)
-        self.initStruct.rho      = self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp)
-            
+        self.initStruct.rho      = [self.util.cp('D', 'T', self.tank_input["Tinit"], 'P', self.tank_input["Pinit"], self.prop_name_cp), self.util.cp('D', 'T', self.tank_input["Tinit"], 'Q', 1, self.prop_name_cp)];
+        
         self.pressurant.setInitialConditions(self.initStruct) # where do we initialize self.pressurant
 
         # Flag tank if its pressurized
@@ -102,7 +101,6 @@ class propellantTankClass:
 
         # Select blowdown def
         self.setBlowdownCharacteristics()
-        return self
          
             
              
@@ -470,22 +468,21 @@ class propellantTankClass:
         name = self.tank_input["name"]
             
         for i in range(0,np.size(self.util.coolprop_alias, 1)-1):
-            if (name== self.util.coolprop_alias[i, 0]):
-                name = self.util.coolprop_alias[i, 0]
+            if (name == self.util.coolprop_alias[i][0]):
+                name = self.util.coolprop_alias[i][1]
         return name
             
         
         
     def presName(self):
-        name = self.tank_input["pressurant"]['name']
-        return name # what ius name
+        name = eval("self.input['" + self.tank_input["pressurant"]+ "']['name']")
+        return name 
 
     def presName_cp(self):
-        name = self.tank_input["pressurant"]['name']
-            
+        name = eval("self.input['" + self.tank_input["pressurant"]+ "']['name']")
         for i in range(0,np.size(self.util.coolprop_alias, 1)-1):
-            if (name == self.util.coolprop_alias[i, 0]):
-                name = self.util.coolprop_alias[i, 1]
+            if (name == self.util.coolprop_alias[i][0]):
+                name = self.util.coolprop_alias[i][1]
 
 
         return name

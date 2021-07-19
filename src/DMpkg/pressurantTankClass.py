@@ -30,11 +30,12 @@ class pressurantTankClass:
             raise Exception("Invalid inputs - pressurantTankClass > __init__")
         
         self.name                                   = self.tank_input["name"]
-        self.cg                                     = np.zeros(input['sim']['numpt'], 1)
+        self.cg                                     = np.zeros((input['sim']['numpt'], 1))
         self.offset                                 = self.tank_input["offset"]
-        self.m                                      = self.tank_input["mInit"]*np.ones(input['sim']['numpt'], 1)
+        self.m                                      = self.tank_input["mInit"]*np.ones((input['sim']['numpt'], 1))
         self.l                                      = self.tank_input["lTank"]
         
+        self.tank                                   = rocket.propertyClass()
         self.tank.m                                 = self.tank_input["mTank"]
         self.tank.V                                 = self.tank_input["vTank"]
         self.tank.cg                                = self.l/2            
@@ -46,13 +47,14 @@ class pressurantTankClass:
         # Initialize propellant liquid phase
         self.pressurant                             = rocket.fluidClass(self.input, self.tank_input)
 
-        self.initstruct.m                           = self.tank_input["mInint"]
-        self.initstruct.T                           = self.tank_input["Tinint"]
-        self.initstruct.P                           = self.tank_input["Pinint"]
-        self.initstuct.rho                          = self.util.coolprop('D', 'P', self.initStruct.P, 'T', self.initStruct.T, self.tank_input["name"])    
+        self.initstruct                             = rocket.propertyClass()
+        self.initstruct.m                           = self.tank_input["mInit"]
+        self.initstruct.T                           = self.tank_input["Tinit"]
+        self.initstruct.P                           = self.tank_input["Pinit"]
+        self.initstruct.rho                          = self.util.coolprop('D', 'P', self.initstruct.P, 'T', self.initstruct.T, self.tank_input["name"])    
 
-        self.pressurant.setInitialConditions(self)
-        self.setBlowdownCharacteristics(self, input)
+        self.pressurant.setInitialConditions(self.initstruct)
+        self.setBlowdownCharacteristics(input)
 
     '''
     %-----------------------------------------------------------------------
@@ -84,7 +86,7 @@ class pressurantTankClass:
     def setBlowdownCharacteristics(self, input):
 
         if self.name == 'N2':
-            self.pressurant.bdChars         = self.bdchars_NITROGEN(self, input)
+            self.pressurant.bdChars         = self.bd_Chars_NITROGEN
         else:
             raise Exception("pressurantTankClass > getBlowdown(): Function has not been specialized for fluid name" + self.name)
 
@@ -104,18 +106,18 @@ class pressurantTankClass:
                     
             bdChars                         = self.pressurant.bdChars
 
-            self.pressurant.P(i, 1)         = self.pressurant.P(i-1, 1) + bdChars.dPdt * dt
-            self.pressurant.T(i, 1)         = self.pressurant.T(i-1, 1) + bdChars.dTdt * dt
-            self.pressurant.rho(i, 1)       = self.util.coolprop('D', 'P', self.pressurant.P(i, 1), 'T', self.pressurant.T(i, 1), self.tank_input["name"])
-            self.pressurant.m(i, 1)         = self.pressurant.m(i-1, 1) - self.pressurant.mdot(i, 1) * dt
+            self.pressurant.P[i, 1]         = self.pressurant.P(i-1, 1) + bdChars.dPdt * dt
+            self.pressurant.T[i, 1]         = self.pressurant.T(i-1, 1) + bdChars.dTdt * dt
+            self.pressurant.rho[i, 1]       = self.util.coolprop('D', 'P', self.pressurant.P(i, 1), 'T', self.pressurant.T(i, 1), self.tank_input["name"])
+            self.pressurant.m[i, 1]         = self.pressurant.m(i-1, 1) - self.pressurant.mdot(i, 1) * dt
     
     def bd_Chars_NITROGEN(self, input):
-        ma                                  = input.m
-        V                                   = input.V
-        T                                   = input.T
-        P                                   = input.P
-        mdot                                = input.mdot
-        qdot                                = input.qdot
+        ma                                  = input["m"]
+        V                                   = input['V']
+        T                                   = input['T']
+        P                                   = input['P']
+        mdot                                = input['mdot']
+        qdot                                = input['qdot']
 
         R                                   = self.util.n2R
         cnv                                 = self.util.cnv

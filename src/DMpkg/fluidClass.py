@@ -27,19 +27,23 @@ class fluidClass:
         self.name                   = inputTag['name']
 
 
-    def setInitialConditions(self, inputTag):
+    def setInitialConditions(self, inputStruct):
 
-        self.IC.m                   = inputTag["mInit"]
-        self.IC.T                   = inputTag["Tinit"]
-        self.IC.P                   = inputTag["Pinit"]
-        self.IC.rho                 = inputTag["Rhoinit"]
-        self.IC.n                   = self.IC.m/self.MW
+        self.IC                     = rocket.propertyClass()
+        self.IC.m                   = inputStruct.m
+        self.IC.T                   = inputStruct.T
+        self.IC.P                   = inputStruct.P
+        self.IC.rho                 = inputStruct.rho
+        if type(self.IC.m) == float:
+            self.IC.n                   = self.IC.m/self.MW
+        elif type(self.IC.m) == list:
+            self.IC.n                   = self.IC.m[0]/self.MW
         
-        self.initializeMass(self, self.IC.m)
-        self.initializeTemperature(self, self.IC.T)
-        self.initializePressure(self, self.IC.P)
-        self.initializeDensity(self, self.IC.rho)
-        self.initializeAmount(self, self.IC.n)
+        self.initializeMass(self.IC.m)
+        self.initializeTemperature(self.IC.T)
+        self.initializePressure(self.IC.P)
+        self.initializeDensity(self.IC.rho)
+        self.initializeAmount(self.IC.n)
 
 
     def initializeMass(self, initValue):
@@ -47,7 +51,7 @@ class fluidClass:
 
     # do we need an initializeDensity function?
     def initializeDensity(self, initValue):
-        self.rho[0]                 = initValue
+        self.rho                 = initValue
     
     def initializeTemperature(self, initValue):
         self.T[0]                   = initValue

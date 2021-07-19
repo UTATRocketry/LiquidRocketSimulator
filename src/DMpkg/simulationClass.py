@@ -36,13 +36,13 @@ class simulationClass:
             self.flight.altBO    = self.input["sim"]["altBO"]
 
             self.setFlightDynamicsType()
-            
+            print('Simulation complete :)')
     def load_variables(self, input_selector):            
             if (input_selector == 'houbolt_jr_batch'):
                 input = rocket.houbolt_jr_batch()
                     
             elif (input_selector == 'houbolt_jr_single'):
-                input = rocket.houbolt_jr_single()
+                input = rocket.houbolt_jr_single('DMpkg/input.yaml')
 
             return input
 

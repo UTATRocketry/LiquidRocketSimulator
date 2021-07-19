@@ -1,14 +1,14 @@
-from src.DMpkg.utilitiesClass import utilitiesClass
-from src.DMpkg.combustionClass import combustionClass
-from src.DMpkg.tankSystemClass import tankSystemClass
-from src.DMpkg.nozzleClass import nozzleClass
-from src.DMpkg.houbolt_jr_single import houbolt_jr_single
+from DMpkg.utilitiesClass import utilitiesClass
+from DMpkg.combustionClass import combustionClass
+from DMpkg.tankSystemClass import tankSystemClass
+from DMpkg.nozzleClass import nozzleClass
+from DMpkg.houbolt_jr_single import houbolt_jr_single
 import DMpkg as rocket
 import numpy as np
 
 class propulsionClass:
-    def __init__(self) -> None:
-        self.input = houbolt_jr_single()
+    def __init__(self,input) -> None:
+        self.input = input
         self.util = utilitiesClass(self.input)
         
         self.info = self.input["engine"]
@@ -37,7 +37,7 @@ class propulsionClass:
         self.nozzle                          = nozzleClass(input)
         
         self.propellants                     = tankSystemClass(input)
-        self.settings['numTanks']            = np.shape(self.propellants.tanks,1)
+        self.settings['numTanks']            = np.shape(self.propellants.tanks)[0]
 
     def getPropellantTags(self):
         self.oxidizerTag = self.input['ox']
@@ -92,10 +92,9 @@ class propulsionClass:
         cstar = np.zeros(self.settings['num_OF'])
 
         for i in range(len(cstar)):
-            comb = self.combustion.get_CEA() #obj.combustion.get(obj.settings.OF_Vec(i), Pcc, 1)
-            # not sure if this should be calling a function 
-            # combustion.get_CEA doesnt return anything
-            cstar[i] = comb.cstar
+            self.combustion.get_CEA() #obj.combustion.get(obj.settings.OF_Vec(i), Pcc, 1)
+
+            cstar[i] = self.combustion.output.cstar
 
     def setPropMasses(self):
 
